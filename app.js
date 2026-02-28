@@ -17,52 +17,52 @@ const mentorsData = {
         id: 'realEstate',
         name: '김태호 & 이수진',
         title: '부동산·주거 행복 봉사팀',
-        image: 'mentor_tax.png',
-        bio: '15년 경력의 베테랑과 열정적인 청년 멘토가 한 조가 되어, 집 계약이나 이사로 고민하는 이웃을 돕습니다. 복잡한 서류 확인부터 좋은 집 고르는 법까지, 2인 1조의 꼼꼼함으로 여러분의 주거 안정을 응원합니다.',
-        stats: { sessions: '500+', response: '30분 내', career: '베테랑&청년' },
+        image: 'cat_realestate.png',
+        bio: '15년 경력의 베테랑 공인중개사와 열정적인 청년 멘토가 한 조가 되어, 집 계약이나 이사로 고민하는 이웃을 돕습니다. 복잡한 등기부등본 확인부터 좋은 집 고르는 노하우까지, 2인 1조의 꼼꼼함으로 여러분의 새로운 시작을 응원합니다.',
+        stats: { sessions: '500+', response: '30분 내', career: '전문가&청년' },
         space: { name: '플러스 정거장: 연남 아뜰리에', address: '서울특별시 마포구 동교로 123-45', desc: '이웃의 보금자리를 함께 고민하는 따뜻한 상담실' }
     },
     healing: {
         id: 'healing',
-        name: '지원 & 민호',
+        name: '박지원 & 김민호',
         title: '마음 치유 미술 봉사팀',
-        image: 'mentor.png',
-        bio: '미술 치료 전문가와 숲 체험 전문가가 함께하는 2인 1조 치유팀입니다. 색채 활동과 자연 이야기를 통해 지친 마음을 어루만져 드립니다. 두 명의 멘토가 더 풍성하고 따뜻한 대화 시간을 만들어 갑니다.',
+        image: 'cat_healing.png',
+        bio: '미술 치료 전문가와 숲 체험 전문가가 함께하는 2인 1조 치유팀입니다. 색채 활동과 자연 이야기를 통해 지친 마음을 어루만져 드립니다. 두 명의 멘토가 더 깊은 공감과 따뜻한 대화 시간을 선물해 드립니다.',
         stats: { sessions: '120+', response: '1시간 내', career: '전문가팀' },
-        space: { name: '플러스 정거장: 연남 아뜰리에', address: '서울특별시 마포구 연남동 123-4', desc: '두 배의 위로가 있는 마음 치유 공간' }
+        space: { name: '플러스 정거장: 숲속 대화방', address: '서울특별시 마포구 연남동 123-4', desc: '두 배의 위로가 있는 마음 치유 공간' }
     },
     legal: {
         id: 'legal',
         name: '박성현 & 김지현',
         title: '이웃 법률 수호 봉사팀',
-        image: 'mentor_legal.png',
-        bio: '법률 전문가와 사회복지 전문가가 한 팀이 되어, 어렵고 딱딱한 법 문제를 이웃의 입장에서 쉽게 풀어드립니다. 법적 자문과 함께 실질적인 생활 지원 대책까지 2인 1조로 명쾌하게 안내해 드립니다.',
-        stats: { sessions: '300+', response: '2시간 내', career: '법률복지팀' },
-        space: { name: '성현 법률 사무소', address: '서울특별시 마포구 공덕동 456', desc: '당신의 권리를 함께 찾는 든든한 공간' }
+        image: 'cat_legal.png',
+        bio: '법률 분석가와 사회복지 전문가가 한 팀이 되어, 어렵고 딱딱한 법 문제를 이웃의 입장에서 쉽게 풀어드립니다. 법적 자문과 함께 실질적인 생활 지원 대책까지 2인 1조로 명쾌하고 든든하게 안내해 드립니다.',
+        stats: { sessions: '300+', response: '2시간 내', career: '법률지원팀' },
+        space: { name: '성현 법률 파트너스', address: '서울특별시 마포구 공덕동 456', desc: '당신의 권리를 함께 찾는 든든한 공간' }
     },
     tax: {
         id: 'tax',
         name: '이정우 & 최준호',
         title: '스마트 자산 코칭 봉사팀',
-        image: 'mentor_tax.png',
-        bio: '세무사와 자산 관리사가 짝을 이루어 복잡한 세금과 효율적인 돈 관리법을 알려드립니다. 한 분은 꼼꼼한 계산을, 한 분은 미래 설계를 맡아 2인 1조의 전문성으로 당신의 자산을 지켜드립니다.',
+        image: 'cat_tax.png',
+        bio: '세무사와 자산 관리사가 짝을 이루어 복잡한 세금과 효율적인 돈 관리법을 알려드립니다. 한 분은 꼼꼼한 계산을, 한 분은 미래 설계를 맡아 2인 1조의 시너지로 여러분의 소중한 자산을 지켜드립니다.',
         stats: { sessions: '450+', response: '1시간 내', career: '세무금융팀' },
-        space: { name: '정우 세무 컨설팅', address: '서울특별시 마포구 서교동 789', desc: '부담 없는 세무 고민 해결소' }
+        space: { name: '정우 세무 컨설턴트', address: '서울특별시 마포구 서교동 789', desc: '부담 없는 세무 고민 해결소' }
     },
     insurance: {
         id: 'insurance',
         name: '최은주 & 강석준',
         title: '안심 보험 설계 봉사팀',
-        image: 'mentor_edu.png',
-        bio: '보험 분석과 손해 사정 분야의 두 멘토가 모여 여러분의 보험을 정직하게 진단합니다. 과다한 지출은 줄이고 보장은 든든하게 채우는 법을 2인 1조의 협업을 통해 투명하게 분석해 드립니다.',
-        stats: { sessions: '280+', response: '1시간 내', career: '안심분석팀' },
+        image: 'cat_insurance.png',
+        bio: '보험 분석과 손해 사정 분야의 두 멘토가 모여 여러분의 보험을 정직하게 진단합니다. 과다한 지출은 줄이고 보장은 탄탄하게 채우는 법을 2인 1조의 협업을 통해 투명하게 분석해 드립니다.',
+        stats: { sessions: '280+', response: '1시간 내', career: '보험분석팀' },
         space: { name: '은주 보험 디자인룸', address: '서울특별시 마포구 성산동 101', desc: '나의 미래를 안심으로 채우는 공간' }
     },
     edu: {
         id: 'edu',
         name: '정미소 & 이다온',
         title: '꿈 키움 교육 컨설팅팀',
-        image: 'mentor_edu.png',
+        image: 'cat_edu.png',
         bio: '교육 전문가와 진로 상담사가 2인 1조로 우리 아이들의 꿈을 함께 그립니다. 아이의 재능을 발견하는 법과 학습 방향 설정을 위해 두 명의 멘토가 정성을 다해 함께 고민하고 가이드를 제공합니다.',
         stats: { sessions: '200+', response: '2시간 내', career: '교육진로팀' },
         space: { name: '미소 교육 코칭 센터', address: '서울특별시 마포구 연남동 202', desc: '아이와 부모가 함께 꿈꾸는 공간' }
@@ -156,9 +156,9 @@ const screens = {
             </section>
             
             <div class="category-list">
-                <div class="category-card" onclick="openMentor('realEstate')">
-                    <div class="category-icon icon-real-estate">
-                        <i class="fa-solid fa-house"></i>
+                <div class="category-card item-real-estate" onclick="openMentor('realEstate')">
+                    <div class="category-thumb">
+                         <img src="cat_realestate.png" alt="부동산">
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">집 계약이나 이사 문제가 고민이에요</h3>
@@ -167,31 +167,31 @@ const screens = {
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
-                <div class="category-card" onclick="openMentor('healing')">
-                    <div class="category-icon icon-healing">
-                        <i class="fa-solid fa-heart"></i>
+                <div class="category-card item-healing" onclick="openMentor('healing')">
+                    <div class="category-thumb">
+                         <img src="cat_healing.png" alt="치유">
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">나와 가족, 우리 관계의 마음을 돌보고 싶어요</h3>
+                        <h3 class="category-name">나와 가족, 관계의 마음을 돌보고 싶어요</h3>
                         <p class="category-desc">심리 상담 · 관계 개선</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
-                <div class="category-card" onclick="openMentor('legal')">
-                    <div class="category-icon icon-legal">
-                        <i class="fa-solid fa-gavel"></i>
+                <div class="category-card item-legal" onclick="openMentor('legal')">
+                    <div class="category-thumb">
+                         <img src="cat_legal.png" alt="법률">
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">억울하고 답답한 법적 문제가 생겼어요</h3>
+                        <h3 class="category-name">억울하고 답답한 법적 문제가 생겼요</h3>
                         <p class="category-desc">법률 자문 · 권리 구제</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
-                <div class="category-card" onclick="openMentor('tax')">
-                    <div class="category-icon icon-tax">
-                        <i class="fa-solid fa-wallet"></i>
+                <div class="category-card item-tax" onclick="openMentor('tax')">
+                    <div class="category-thumb">
+                         <img src="cat_tax.png" alt="세무">
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">복잡한 세금과 돈 관리가 막막해요</h3>
@@ -200,9 +200,9 @@ const screens = {
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
-                <div class="category-card" onclick="openMentor('insurance')">
-                    <div class="category-icon icon-insurance">
-                        <i class="fa-solid fa-shield-halved"></i>
+                <div class="category-card item-insurance" onclick="openMentor('insurance')">
+                    <div class="category-thumb">
+                         <img src="cat_insurance.png" alt="보험">
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">내 보험, 제대로 들고 있는지 궁금해요</h3>
@@ -211,12 +211,12 @@ const screens = {
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
-                <div class="category-card" onclick="openMentor('edu')">
-                    <div class="category-icon icon-healing"> <!-- 아이콘 배경색 스타일 유지를 위해 healing 대신 적절한 클래스 사용 권장하나 우선 유지 -->
-                        <i class="fa-solid fa-graduation-cap" style="color:#F0932B;"></i>
+                <div class="category-card item-edu" onclick="openMentor('edu')">
+                    <div class="category-thumb">
+                         <img src="cat_edu.png" alt="교육">
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">우리 아이 교육과 진로 방향을 잡기 어려워요</h3>
+                        <h3 class="category-name">우리 아이 교육과 진로 방향을 잡고 싶어요</h3>
                         <p class="category-desc">교육 · 입시 · 진로</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
@@ -228,9 +228,9 @@ const screens = {
                     <i class="fa-solid fa-house-chimney"></i>
                     <span>홈</span>
                 </div>
-                <div class="nav-item" onclick="navigateTo('history')">
-                    <i class="fa-regular fa-comment-dots"></i>
-                    <span>상담</span>
+                <div class="nav-item" onclick="navigateTo('myBookings')">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>예약내역</span>
                 </div>
                 <div class="nav-item" onclick="alert('커뮤니티 서비스는 현재 준비 중입니다.')">
                     <i class="fa-solid fa-users"></i>
@@ -740,6 +740,59 @@ const screens = {
                     닫기
                 </button>
             </div>
+        </div>
+    `,
+    myBookings: () => `
+        <div class="screen bookings-screen fade-in">
+            <header class="header">
+                <h2 class="brand-name">내 예약 내역</h2>
+                <div class="profile-icon">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+            </header>
+
+            <div class="bookings-content p-3">
+                ${bookingHistory.length === 0 ? `
+                    <div style="text-align: center; padding: 100px 20px;">
+                        <i class="fa-regular fa-calendar-check" style="font-size: 60px; color: var(--primary-light); margin-bottom: 24px; display: block;"></i>
+                        <p style="color: var(--text-dim);">아직 예약된 내역이 없습니다.<br>멘토를 찾아 마음을 나누어 보세요.</p>
+                        <button class="btn-primary mt-3" onclick="navigateTo('category')">멘토 찾기</button>
+                    </div>
+                ` : `
+                    <div class="history-list">
+                        ${bookingHistory.map(item => `
+                            <div class="history-item" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-soft);">
+                                <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div>
+                                        <h4 style="font-size: 16px; margin-bottom: 4px;">${item.mentorName}</h4>
+                                        <p style="font-size: 13px; color: var(--primary-dark); font-weight: 600;">${item.location}</p>
+                                    </div>
+                                    <span style="background: var(--primary-light); color: var(--primary-dark); font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 20px;">예약 확정</span>
+                                </div>
+                                <div style="border-top: 1px dashed #eee; padding-top: 12px; font-size: 13px; color: var(--text-dim);">
+                                    <p><i class="fa-regular fa-clock" style="margin-right: 6px;"></i> ${item.date} ${item.time}</p>
+                                    <p style="margin-top: 4px;"><i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> ${item.address}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `}
+            </div>
+
+            <nav class="bottom-nav">
+                <div class="nav-item" onclick="navigateTo('category')">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <span>홈</span>
+                </div>
+                <div class="nav-item active" onclick="navigateTo('myBookings')">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>예약내역</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>설정</span>
+                </div>
+            </nav>
         </div>
     `
 };
