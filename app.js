@@ -81,10 +81,10 @@ const screens = {
                 <p class="welcome-subtitle">이웃의 재능을 나누고<br>마음을 치유하는 따뜻한 공간<br><span style="color:var(--primary-color)">간편하게 시작하기 ↓</span></p>
                 
                 <div class="login-buttons">
-                    <button class="btn-login btn-kakao" onclick="navigateTo('category')">
+                    <button class="btn-login btn-kakao" onclick="handleLogin('카카오')">
                         <i class="fa-solid fa-comment"></i> 카카오로 1초 로그인
                     </button>
-                    <button class="btn-login btn-naver" onclick="navigateTo('category')">
+                    <button class="btn-login btn-naver" onclick="handleLogin('네이버')">
                         <i class="fa-solid fa-n"></i> 네이버로 1초 로그인
                     </button>
                 </div>
@@ -995,6 +995,28 @@ window.shareMentorProfile = shareMentorProfile;
 window.updateLocation = updateLocation;
 window.updateAddress = updateAddress;
 window.selectTime = selectTime;
+
+// --- Login Simulation ---
+function handleLogin(provider) {
+    const loginButtons = document.querySelector('.login-buttons');
+    if (!loginButtons) return;
+
+    // 로딩 상태 표시
+    loginButtons.innerHTML = `
+        <div style="padding: 20px; text-align: center;">
+            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 32px; color: var(--primary-color); margin-bottom: 16px;"></i>
+            <p style="color: var(--text-dim); font-size: 14px;">${provider} 인증 중입니다...</p>
+        </div>
+    `;
+
+    // 1.5초 후 로그인 완료 처리
+    setTimeout(() => {
+        alert(`${provider} 계정으로 로그인이 완료되었습니다!\n플러스 정거장에 오신 것을 환영합니다. 😊`);
+        navigateTo('category');
+    }, 1500);
+}
+
+window.handleLogin = handleLogin;
 
 // Initial Rendering
 document.addEventListener('DOMContentLoaded', () => {
