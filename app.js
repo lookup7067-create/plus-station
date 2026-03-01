@@ -1465,14 +1465,23 @@ function loginWithEmail() {
     }
     // 2. 멘토 계정들 (비번: mentor123 공통)
     else if (email.endsWith('@plus.com') && pw === 'mentor123') {
-        const category = email.split('@')[0];
-        const categories = ['realEstate', 'healing', 'legal', 'tax', 'insurance', 'edu'];
+        const categoryInput = email.split('@')[0].toLowerCase();
+        const categoriesMap = {
+            'realestate': 'realEstate',
+            'healing': 'healing',
+            'legal': 'legal',
+            'tax': 'tax',
+            'insurance': 'insurance',
+            'edu': 'edu'
+        };
 
-        if (categories.includes(category)) {
+        const categoryKey = categoriesMap[categoryInput];
+
+        if (categoryKey) {
             currentUser = {
-                name: mentorsData[category].name.split('&')[0].trim() + ' 멘토님',
+                name: mentorsData[categoryKey].name.split('&')[0].trim() + ' 멘토님',
                 role: 'mentor',
-                mentorId: category
+                mentorId: categoryKey
             };
             alert(`${currentUser.name}으로 오신 것을 환영합니다. 담당 파트 예약을 관리해 보세요.`);
         } else {
