@@ -1027,8 +1027,16 @@ const screens = {
                         <h3 style="font-size:16px; margin-bottom:16px; color:var(--primary-color);">
                             <i class="fa-solid fa-pen-nib"></i> 공지사항 작성 (관리자)
                         </h3>
-                        <input type="text" id="notice-title" placeholder="제목을 입력하세요" style="width:100%; height:45px; border-radius:12px; border:1px solid #eee; padding:0 15px; margin-bottom:12px; font-size:14px;">
-                        <textarea id="notice-content" placeholder="공지할 내용을 상세히 적어주세요" style="width:100%; height:100px; border-radius:12px; border:1px solid #eee; padding:12px 15px; margin-bottom:12px; font-size:14px; font-family:inherit; resize:none;"></textarea>
+                        <input type="text" id="notice-title" value="[공지] 플러스 정거장에 오신 여러분을 환영합니다! ✨" style="width:100%; height:45px; border-radius:12px; border:1px solid #eee; padding:0 15px; margin-bottom:12px; font-size:14px;">
+                        <textarea id="notice-content" style="width:100%; height:150px; border-radius:12px; border:1px solid #eee; padding:12px 15px; margin-bottom:12px; font-size:14px; font-family:inherit; resize:none;">안녕하세요, 플러스 정거장입니다. 🌿
+
+우리 사회에 따뜻한 손길이 필요한 분들을 위해, 소중한 멘토님들이 마음을 모아 이 공간을 함께 만들어가고 있습니다.
+
+'플러스 정거장'은 부동산, 힐링, 법률 등 총 6개의 전문 영역에서 활동하시는 멘토 봉사자분들이 여러분의 행복한 삶을 응원하며 기다리고 있는 따뜻한 쉼터입니다. 누구나 편안하게 이용해 주세요.
+
+또한, 저희와 함께 따뜻한 가치를 나누고 싶은 새로운 봉사자분들의 참여도 언제나 환영합니다. 나눔의 기쁨으로 세상을 밝게 비추고 싶은 분들은 주저 말고 함께해 주시기 바랍니다.
+
+감사합니다.</textarea>
                         <button class="btn-primary" onclick="submitNotice()" style="width:100%; height:45px; font-size:14px;">공지 등록하기</button>
                     </div>
                 </div>
