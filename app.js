@@ -985,21 +985,21 @@ const screens = {
             
             <div class="p-3">
                 <div class="settings-list" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-soft);">
-                    <div class="settings-item" onclick="toggleSetting('push')">
+                    <div class="settings-item" onclick="toggleSetting('push', event)" style="padding: 24px 20px;">
                         <div>
                             <p style="font-weight: 500; margin-bottom: 2px;">푸시 알림</p>
                             <p style="font-size: 11px; color: var(--text-dim);">예약 확정 및 취소 알림</p>
                         </div>
                         <div class="toggle-switch ${s.push ? 'active' : ''}"></div>
                     </div>
-                    <div class="settings-item" onclick="toggleSetting('marketing')">
+                    <div class="settings-item" onclick="toggleSetting('marketing', event)" style="padding: 24px 20px;">
                         <div>
                             <p style="font-weight: 500; margin-bottom: 2px;">마케팅 정보 수신</p>
                             <p style="font-size: 11px; color: var(--text-dim);">새로운 멘토 및 이벤트 소식</p>
                         </div>
                         <div class="toggle-switch ${s.marketing ? 'active' : ''}"></div>
                     </div>
-                    <div class="settings-item" onclick="toggleSetting('night')">
+                    <div class="settings-item" onclick="toggleSetting('night', event)" style="padding: 24px 20px;">
                         <div>
                             <p style="font-weight: 500; margin-bottom: 2px;">야간 알림 제한</p>
                             <p style="font-size: 11px; color: var(--text-dim);">오후 9시 ~ 오전 8시 알림 끄기</p>
@@ -1823,12 +1823,35 @@ function saveUserProfile() {
 }
 
 // Settings Toggle Function
-function toggleSetting(key) {
+function toggleSetting(key, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+
     if (!currentUser.settings) {
         currentUser.settings = { push: true, marketing: false, night: true };
     }
+
+    // 해당 설정값 반전
     currentUser.settings[key] = !currentUser.settings[key];
-    navigateTo('notificationSettings'); // Refresh UI
+
+    // UI 즉시 반영 (전체 화면 갱신 대신 DOM 직접 조작으로 더 부드럽게)
+    const item = event ? event.currentTarget : null;
+    if (item) {
+        const toggle = item.querySelector('.toggle-switch');
+        if (toggle) {
+            if (currentUser.settings[key]) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+        }
+    } else {
+        // 이벤트를 못 잡은 경우 전체 갱신
+        navigateTo('notificationSettings');
+    }
+
+    console.log(`알림 설정 변경: ${key} -> ${currentUser.settings[key]}`);
 }
 
 // Announcement Functions
