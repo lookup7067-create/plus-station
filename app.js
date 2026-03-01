@@ -34,54 +34,54 @@ let bookingHistory = []; // 예약 내역 저장 공간
 const mentorsData = {
     realEstate: {
         id: 'realEstate',
-        name: '김태호 & 이수진',
+        name: '이태호 & 박수진',
         title: '부동산·주거 행복 봉사팀',
-        image: 'cat_realestate.png',
+        image: 'mentor_realestate_3d.png',
         bio: '15년 경력의 베테랑 공인중개사와 열정적인 청년 멘토가 한 조가 되어, 집 계약이나 이사로 고민하는 이웃을 돕습니다. 복잡한 등기부등본 확인부터 좋은 집 고르는 노하우까지, 2인 1조의 꼼꼼함으로 여러분의 새로운 시작을 응원합니다.',
         stats: { sessions: '500+', response: '30분 내', career: '전문가&청년' },
         space: { name: '플러스 정거장: 연남 아뜰리에', address: '서울특별시 마포구 동교로 123-45', desc: '이웃의 보금자리를 함께 고민하는 따뜻한 상담실' }
     },
     healing: {
         id: 'healing',
-        name: '박지원 & 김민호',
+        name: '정지원 & 서민호',
         title: '마음 치유 미술 봉사팀',
-        image: 'cat_healing.png',
+        image: 'mentor_healing_3d.png',
         bio: '미술 치료 전문가와 숲 체험 전문가가 함께하는 2인 1조 치유팀입니다. 색채 활동과 자연 이야기를 통해 지친 마음을 어루만져 드립니다. 두 명의 멘토가 더 깊은 공감과 따뜻한 대화 시간을 선물해 드립니다.',
         stats: { sessions: '120+', response: '1시간 내', career: '전문가팀' },
         space: { name: '플러스 정거장: 숲속 대화방', address: '서울특별시 마포구 연남동 123-4', desc: '두 배의 위로가 있는 마음 치유 공간' }
     },
     legal: {
         id: 'legal',
-        name: '박성현 & 김지현',
+        name: '강성현 & 최지현',
         title: '이웃 법률 수호 봉사팀',
-        image: 'cat_legal.png',
-        bio: '법률 분석가와 사회복지 전문가가 한 팀이 되어, 어렵고 딱딱한 법 문제를 이웃의 입장에서 쉽게 풀어드립니다. 법적 자문과 함께 실질적인 생활 지원 대책까지 2인 1조로 명쾌하고 든든하게 안내해 드립니다.',
+        image: 'mentor_legal_3d.png',
+        bio: '법률 분석가와 사회복지 전문가가 한 팀이 되어, 어렵고 딱딱한 법 문제를 이웃의 입장에서 쉽게 풀어드립니다. 법률 자문과 함께 실질적인 생활 지원 대책까지 2인 1조로 명쾌하고 든든하게 안내해 드립니다.',
         stats: { sessions: '300+', response: '2시간 내', career: '법률지원팀' },
         space: { name: '성현 법률 파트너스', address: '서울특별시 마포구 공덕동 456', desc: '당신의 권리를 함께 찾는 든든한 공간' }
     },
     tax: {
         id: 'tax',
-        name: '이정우 & 최준호',
+        name: '한정우 & 윤준호',
         title: '스마트 자산 코칭 봉사팀',
-        image: 'cat_tax.png',
+        image: 'mentor_tax_3d.png',
         bio: '세무사와 자산 관리사가 짝을 이루어 복잡한 세금과 효율적인 돈 관리법을 알려드립니다. 한 분은 꼼꼼한 계산을, 한 분은 미래 설계를 맡아 2인 1조의 시너지로 여러분의 소중한 자산을 지켜드립니다.',
         stats: { sessions: '450+', response: '1시간 내', career: '세무금융팀' },
         space: { name: '정우 세무 컨설턴트', address: '서울특별시 마포구 서교동 789', desc: '부담 없는 세무 고민 해결소' }
     },
     insurance: {
         id: 'insurance',
-        name: '최은주 & 강석준',
+        name: '신은주 & 오석준',
         title: '안심 보험 설계 봉사팀',
-        image: 'cat_insurance.png',
+        image: 'mentor_insurance_3d.png',
         bio: '보험 분석과 손해 사정 분야의 두 멘토가 모여 여러분의 보험을 정직하게 진단합니다. 과다한 지출은 줄이고 보장은 탄탄하게 채우는 법을 2인 1조의 협업을 통해 투명하게 분석해 드립니다.',
         stats: { sessions: '280+', response: '1시간 내', career: '보험분석팀' },
         space: { name: '은주 보험 디자인룸', address: '서울특별시 마포구 성산동 101', desc: '나의 미래를 안심으로 채우는 공간' }
     },
     edu: {
         id: 'edu',
-        name: '정미소 & 이다온',
+        name: '배미소 & 안다온',
         title: '꿈 키움 교육 컨설팅팀',
-        image: 'cat_edu.png',
+        image: 'mentor_edu_3d.png',
         bio: '교육 전문가와 진로 상담사가 2인 1조로 우리 아이들의 꿈을 함께 그립니다. 아이의 재능을 발견하는 법과 학습 방향 설정을 위해 두 명의 멘토가 정성을 다해 함께 고민하고 가이드를 제공합니다.',
         stats: { sessions: '200+', response: '2시간 내', career: '교육진로팀' },
         space: { name: '미소 교육 코칭 센터', address: '서울특별시 마포구 연남동 202', desc: '아이와 부모가 함께 꿈꾸는 공간' }
