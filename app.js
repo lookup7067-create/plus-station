@@ -252,21 +252,17 @@ const screens = {
             </div>
             
             <nav class="bottom-nav">
-                <div class="nav-item active" onclick="navigateTo('category')">
+                <div class="nav-item ${currentState === 'category' ? 'active' : ''}" onclick="navigateTo('category')">
                     <i class="fa-solid fa-house-chimney"></i>
                     <span>홈</span>
                 </div>
-                <div class="nav-item" onclick="navigateTo('myBookings')">
+                <div class="nav-item ${currentState === 'myBookings' ? 'active' : ''}" onclick="navigateTo('myBookings')">
                     <i class="fa-solid fa-calendar-check"></i>
                     <span>예약내역</span>
                 </div>
-                <div class="nav-item" onclick="alert('커뮤니티 서비스는 현재 준비 중입니다.')">
-                    <i class="fa-solid fa-users"></i>
-                    <span>커뮤니티</span>
-                </div>
-                <div class="nav-item" onclick="alert('내 정보 관리 기능은 현재 준비 중입니다.')">
-                    <i class="fa-regular fa-id-card"></i>
-                    <span>내 정보</span>
+                <div class="nav-item ${currentState === 'settings' ? 'active' : ''}" onclick="navigateTo('settings')">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>설정</span>
                 </div>
             </nav>
         </div>
@@ -492,21 +488,17 @@ const screens = {
             </div>
             
             <nav class="bottom-nav">
-                <div class="nav-item" onclick="navigateTo('category')">
+                <div class="nav-item ${currentState === 'category' ? 'active' : ''}" onclick="navigateTo('category')">
                     <i class="fa-solid fa-house-chimney"></i>
                     <span>홈</span>
                 </div>
-                <div class="nav-item" onclick="navigateTo('history')">
-                    <i class="fa-regular fa-comment-dots"></i>
-                    <span>상담</span>
+                <div class="nav-item ${currentState === 'myBookings' ? 'active' : ''}" onclick="navigateTo('myBookings')">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>예약내역</span>
                 </div>
-                <div class="nav-item" onclick="alert('커뮤니티 서비스는 현재 준비 중입니다.')">
-                    <i class="fa-solid fa-users"></i>
-                    <span>커뮤니티</span>
-                </div>
-                <div class="nav-item" onclick="alert('내 정보 관리 기능은 현재 준비 중입니다.')">
-                    <i class="fa-regular fa-id-card"></i>
-                    <span>내 정보</span>
+                <div class="nav-item ${currentState === 'settings' ? 'active' : ''}" onclick="navigateTo('settings')">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>설정</span>
                 </div>
             </nav>
         </div>
@@ -594,8 +586,8 @@ const screens = {
                 </div>
 
                 <div class="payment-footer">
-                    <button class="btn-payment" onclick="navigateTo('success')">
-                        결제 및 예약 확정 <i class="fa-solid fa-credit-card"></i>
+                    <button class="btn-payment" onclick="navigateTo('payment')">
+                        결정 완료 및 결제하기 <i class="fa-solid fa-chevron-right" style="font-size:12px; margin-left:4px;"></i>
                     </button>
                 </div>
             </div>
@@ -837,15 +829,15 @@ const screens = {
             </div>
 
             <nav class="bottom-nav">
-                <div class="nav-item" onclick="navigateTo('category')">
+                <div class="nav-item ${currentState === 'category' ? 'active' : ''}" onclick="navigateTo('category')">
                     <i class="fa-solid fa-house-chimney"></i>
                     <span>홈</span>
                 </div>
-                <div class="nav-item active" onclick="navigateTo('myBookings')">
+                <div class="nav-item ${currentState === 'myBookings' ? 'active' : ''}" onclick="navigateTo('myBookings')">
                     <i class="fa-solid fa-calendar-check"></i>
                     <span>예약내역</span>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item ${currentState === 'settings' ? 'active' : ''}" onclick="navigateTo('settings')">
                     <i class="fa-solid fa-gear"></i>
                     <span>설정</span>
                 </div>
@@ -887,6 +879,220 @@ const screens = {
                 </div>
             </div>
         </div>
+    `,
+    settings: () => `
+        <div class="screen settings-screen fade-in">
+            <header class="header">
+                <div class="brand-wrapper">
+                    <h2 class="brand-name">설정</h2>
+                </div>
+                <div style="width:40px;"></div>
+            </header>
+
+            <div class="settings-content p-3">
+                <div class="user-profile-card" style="background: white; border-radius: 20px; padding: 24px; display: flex; align-items: center; gap: 20px; margin-bottom: 24px; box-shadow: var(--shadow-soft);">
+                    <div class="profile-avatar-wrapper">
+                        <img id="settings-profile-img" src="${currentUser && currentUser.avatar ? currentUser.avatar : `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser ? currentUser.name : 'Guest'}`}" class="settings-profile-img">
+                        <div class="camera-badge" onclick="document.getElementById('profile-file-input').click()" title="사진 변경">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+                    </div>
+                    <input type="file" id="profile-file-input" style="display:none;" accept="image/*" onchange="handleProfilePhotoChange(event)">
+                    <div>
+                        <h3 style="font-size: 18px; margin-bottom: 4px;">${currentUser ? currentUser.name : '사용자'}님</h3>
+                        <p style="font-size: 13px; color: var(--text-dim);">${currentUser && currentUser.role === 'developer' ? '최고 관리자 권한' : (currentUser && currentUser.role === 'mentor' ? '멘토 권한' : '일반 회원')}</p>
+                    </div>
+                </div>
+
+                <div class="settings-list" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-soft);">
+                    <div class="settings-item" onclick="navigateTo('editProfile')">
+                        <span style="font-weight: 500;">개인정보 수정</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="settings-item" onclick="navigateTo('notificationSettings')">
+                        <span style="font-weight: 500;">알림 설정</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="settings-item" onclick="navigateTo('announcements')">
+                        <span style="font-weight: 500;">공지사항</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="settings-item" style="color: #FF6B6B; font-weight: 700;" onclick="handleLogout()">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            <span>로그아웃</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p style="text-align: center; margin-top: 32px; font-size: 12px; color: #ccc;">버전 1.2.0 • 플러스 정거장</p>
+            </div>
+
+            <nav class="bottom-nav">
+                <div class="nav-item ${currentState === 'category' ? 'active' : ''}" onclick="navigateTo('category')">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <span>홈</span>
+                </div>
+                <div class="nav-item ${currentState === 'myBookings' ? 'active' : ''}" onclick="navigateTo('myBookings')">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>예약내역</span>
+                </div>
+                <div class="nav-item ${currentState === 'settings' ? 'active' : ''}" onclick="navigateTo('settings')">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>설정</span>
+                </div>
+            </nav>
+        </div>
+    `,
+    editProfile: () => `
+        <div class="screen edit-profile-screen fade-in">
+            <header class="header">
+                <button class="back-btn" onclick="navigateTo('settings')">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 class="title-center">개인정보 수정</h2>
+                <div style="width:40px;"></div>
+            </header>
+            
+            <div class="p-3">
+                <div class="input-group" style="margin-bottom: 24px;">
+                    <label style="font-size:13px; font-weight:700; color:#555; margin-bottom:8px; display:block;">이름</label>
+                    <input type="text" id="edit-user-name" value="${currentUser ? currentUser.name : ''}" style="width:100%; height:55px; border-radius:15px; border:1px solid #eee; padding:0 18px; background:#f9f9f9; font-size:15px;">
+                </div>
+                
+                <div class="input-group" style="margin-bottom: 32px;">
+                    <label style="font-size:13px; font-weight:700; color:#555; margin-bottom:8px; display:block;">이메일</label>
+                    <input type="email" value="${currentUser && currentUser.email ? currentUser.email : 'user@plus.com'}" disabled style="width:100%; height:55px; border-radius:15px; border:1px solid #eee; padding:0 18px; background:#f0f0f0; color:#999; font-size:15px;">
+                    <p style="font-size:11px; color:#aaa; margin-top:8px; margin-left:4px;">이메일은 변경할 수 없습니다.</p>
+                </div>
+                
+                <button class="btn-primary" style="height:55px; border-radius:15px; width:100%;" onclick="saveUserProfile()">변경사항 저장</button>
+            </div>
+        </div>
+    `,
+    notificationSettings: () => {
+        if (!currentUser.settings) currentUser.settings = { push: true, marketing: false, night: true };
+        const s = currentUser.settings;
+        return `
+        <div class="screen notification-screen fade-in">
+            <header class="header">
+                <button class="back-btn" onclick="navigateTo('settings')">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 class="title-center">알림 설정</h2>
+                <div style="width:40px;"></div>
+            </header>
+            
+            <div class="p-3">
+                <div class="settings-list" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-soft);">
+                    <div class="settings-item" onclick="toggleSetting('push')">
+                        <div>
+                            <p style="font-weight: 500; margin-bottom: 2px;">푸시 알림</p>
+                            <p style="font-size: 11px; color: var(--text-dim);">예약 확정 및 취소 알림</p>
+                        </div>
+                        <div class="toggle-switch ${s.push ? 'active' : ''}"></div>
+                    </div>
+                    <div class="settings-item" onclick="toggleSetting('marketing')">
+                        <div>
+                            <p style="font-weight: 500; margin-bottom: 2px;">마케팅 정보 수신</p>
+                            <p style="font-size: 11px; color: var(--text-dim);">새로운 멘토 및 이벤트 소식</p>
+                        </div>
+                        <div class="toggle-switch ${s.marketing ? 'active' : ''}"></div>
+                    </div>
+                    <div class="settings-item" onclick="toggleSetting('night')">
+                        <div>
+                            <p style="font-weight: 500; margin-bottom: 2px;">야간 알림 제한</p>
+                            <p style="font-size: 11px; color: var(--text-dim);">오후 9시 ~ 오전 8시 알림 끄기</p>
+                        </div>
+                        <div class="toggle-switch ${s.night ? 'active' : ''}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    },
+    announcements: () => `
+        <div class="screen announcements-screen fade-in">
+            <header class="header">
+                <button class="back-btn" onclick="navigateTo('settings')">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 class="title-center">공지사항</h2>
+                <div style="width:40px;"></div>
+            </header>
+            
+            ${currentUser && currentUser.role === 'developer' ? `
+                <div class="p-3">
+                    <div style="background: white; border-radius: 20px; padding: 20px; box-shadow: var(--shadow-soft); margin-bottom: 24px;">
+                        <h3 style="font-size:16px; margin-bottom:16px; color:var(--primary-color);">
+                            <i class="fa-solid fa-pen-nib"></i> 공지사항 작성 (관리자)
+                        </h3>
+                        <input type="text" id="notice-title" placeholder="제목을 입력하세요" style="width:100%; height:45px; border-radius:12px; border:1px solid #eee; padding:0 15px; margin-bottom:12px; font-size:14px;">
+                        <textarea id="notice-content" placeholder="공지할 내용을 상세히 적어주세요" style="width:100%; height:100px; border-radius:12px; border:1px solid #eee; padding:12px 15px; margin-bottom:12px; font-size:14px; font-family:inherit; resize:none;"></textarea>
+                        <button class="btn-primary" onclick="submitNotice()" style="width:100%; height:45px; font-size:14px;">공지 등록하기</button>
+                    </div>
+                </div>
+            ` : ''}
+
+            <div class="p-3" id="announcement-list" style="display: flex; flex-direction: column; gap: 16px; padding-top: ${currentUser && currentUser.role === 'developer' ? '0' : '20px'};">
+                <!-- 공지 리스트가 여기에 렌더링됩니다 -->
+            </div>
+        </div>
+    `,
+    payment: () => `
+        <div class="screen payment-screen fade-in">
+            <header class="header">
+                <button class="back-btn" onclick="navigateTo('booking')">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 class="title-center">결제하기</h2>
+                <div style="width:40px;"></div>
+            </header>
+
+            <div class="p-3">
+                <div class="payment-summary" style="background: white; border-radius: 20px; padding: 24px; box-shadow: var(--shadow-soft); margin-bottom: 24px; text-align: center;">
+                    <p style="font-size: 14px; color: var(--text-dim); margin-bottom: 8px;">최종 결제 금액</p>
+                    <h2 style="font-size: 32px; color: var(--primary-color); font-weight: 800;">2,000원</h2>
+                    <p style="font-size: 12px; color: #aaa; margin-top: 12px;">멘토링 노쇼 방지를 위한 소액 책임비(다과비)입니다.</p>
+                </div>
+
+                <h3 style="font-size: 16px; margin-bottom: 16px; font-weight: 700;">결제 수단 선택</h3>
+                
+                <div class="payment-methods" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px;">
+                    <div class="pay-method-card active" onclick="selectPayMethod(this)">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>신용/체크카드</span>
+                    </div>
+                    <div class="pay-method-card" onclick="selectPayMethod(this)">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg" style="width:18px; height:18px; border-radius:4px; vertical-align:middle; margin-right:4px;" alt="">
+                        <span>카카오페이</span>
+                    </div>
+                    <div class="pay-method-card" onclick="selectPayMethod(this)">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                        <span>토스페이</span>
+                    </div>
+                    <div class="pay-method-card" onclick="selectPayMethod(this)">
+                        <i class="fa-brands fa-paypal"></i>
+                        <span>PayPal</span>
+                    </div>
+                </div>
+
+                <div class="agree-section" style="margin-bottom: 32px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="pay-agree" checked style="width:18px; height:18px; accent-color: var(--primary-color);">
+                        <span style="font-size: 13px; color: #666;">위 결제 내용을 확인하였으며 본인 동의합니다.</span>
+                    </label>
+                </div>
+
+                <button class="btn-primary" style="height: 60px; border-radius: 18px; width: 100%; font-size: 18px;" onclick="processPayment()">
+                    보안 결제하기 <i class="fa-solid fa-lock" style="font-size:14px; margin-left:8px;"></i>
+                </button>
+                
+                <p style="text-align: center; font-size: 11px; color: #bbb; margin-top: 20px;">
+                    안전한 결제를 위해 암호화된 보안 서버를 이용합니다.
+                </p>
+            </div>
+        </div>
     `
 };
 
@@ -900,9 +1106,9 @@ function navigateTo(screenId) {
         }
     }
 
+    currentState = screenId;
     const templateFn = screens[screenId];
     app.innerHTML = templateFn();
-    currentState = screenId;
     window.scrollTo(0, 0);
 
     if (screenId === 'booking') {
@@ -968,13 +1174,21 @@ function navigateTo(screenId) {
         loadMentorBookings();
     }
 
+    if (screenId === 'announcements') {
+        loadAnnouncements();
+    }
+
     if (screenId === 'qrShare') {
         setTimeout(() => {
             const container = document.getElementById('qrcode-container');
-            if (container) {
+            if (container && currentMentor) {
                 container.innerHTML = "";
+                // 현재 접속 중인 주소를 기반으로 멘토 아이디 파라미터 추가 (더 견고한 방식)
+                const baseUrl = window.location.href.split('?')[0].split('#')[0];
+                const shareUrl = `${baseUrl}?m=${currentMentor.id}`;
+
                 new QRCode(container, {
-                    text: window.location.href,
+                    text: shareUrl,
                     width: 200,
                     height: 200,
                     colorDark: "#2D3436",
@@ -1078,11 +1292,13 @@ function shareMentorProfile() {
 }
 
 function shareMentorProfileOriginal() {
+    const baseUrl = window.location.href.split('?')[0].split('#')[0];
+    const shareUrl = `${baseUrl}?m=${currentMentor.id}`;
     if (navigator.share) {
         navigator.share({
             title: `플러스 정거장 - ${currentMentor.name} 멘토`,
             text: `${currentMentor.title} ${currentMentor.name} 멘토님을 소개합니다.`,
-            url: window.location.href,
+            url: shareUrl,
         })
             .then(() => console.log('공유 성공'))
             .catch((error) => console.log('공유 실패', error));
@@ -1090,11 +1306,11 @@ function shareMentorProfileOriginal() {
         // Web Share API를 지원하지 않는 경우 클립보드 복사
         const dummy = document.createElement("input");
         document.body.appendChild(dummy);
-        dummy.value = window.location.href;
+        dummy.value = shareUrl;
         dummy.select();
         document.execCommand("copy");
         document.body.removeChild(dummy);
-        alert("링크가 클립보드에 복사되었습니다. 원하는 곳에 붙여넣기 해주세요!");
+        alert("멘토 프로필 링크가 클립보드에 복사되었습니다. ✨");
     }
 }
 
@@ -1569,12 +1785,198 @@ async function syncMentorsWithFirebase() {
     }
 }
 
+function handleLogout() {
+    if (confirm('로그아웃 하시겠습니까?')) {
+        currentUser = null;
+        navigateTo('login');
+    }
+}
+
+// Profile Photo Change Function for Settings
+function handleProfilePhotoChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            if (currentUser) {
+                currentUser.avatar = e.target.result;
+                const img = document.getElementById('settings-profile-img');
+                if (img) img.src = e.target.result;
+                alert('프로필 사진이 성공적으로 변경되었습니다! ✨');
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function saveUserProfile() {
+    const newName = document.getElementById('edit-user-name').value;
+    if (newName.trim() === '') {
+        alert('이름을 입력해 주세요.');
+        return;
+    }
+    if (currentUser) {
+        currentUser.name = newName;
+        alert('회원 정보가 저장되었습니다. ✨');
+        navigateTo('settings');
+    }
+}
+
+// Settings Toggle Function
+function toggleSetting(key) {
+    if (!currentUser.settings) {
+        currentUser.settings = { push: true, marketing: false, night: true };
+    }
+    currentUser.settings[key] = !currentUser.settings[key];
+    navigateTo('notificationSettings'); // Refresh UI
+}
+
+// Announcement Functions
+async function submitNotice() {
+    const title = document.getElementById('notice-title').value;
+    const content = document.getElementById('notice-content').value;
+
+    if (!title || !content) {
+        alert('제목과 내용을 모두 입력해 주세요. 😊');
+        return;
+    }
+
+    try {
+        await db.collection('notices').add({
+            title,
+            content,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            isNew: true
+        });
+        alert('공지사항이 성공적으로 등록되었습니다! 📢');
+        loadAnnouncements(); // Refresh list
+    } catch (error) {
+        console.error("공지 등록 오류:", error);
+        alert('앗, 등록 중에 문제가 발생했어요. 다시 시도해 주세요.');
+    }
+}
+
+async function loadAnnouncements() {
+    const list = document.getElementById('announcement-list');
+    if (!list) return;
+
+    list.innerHTML = `
+        <div style="text-align: center; padding: 60px 20px;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--primary-color);"></i>
+        </div>
+    `;
+
+    try {
+        const snapshot = await db.collection('notices').orderBy('timestamp', 'desc').get();
+        if (snapshot.empty) {
+            list.innerHTML = `
+                <div style="text-align:center; padding: 60px 24px; color: #bbb;">
+                    <i class="fa-regular fa-bell-slash" style="font-size:40px; margin-bottom: 16px; opacity:0.3;"></i>
+                    <p>등록된 공지사항이 아직 없어요.<br>소중한 소식을 기다려 주세요!</p>
+                </div>
+            `;
+            return;
+        }
+
+        list.innerHTML = snapshot.docs.map(doc => {
+            const data = doc.data();
+            const dateStr = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('ko-KR', {
+                year: 'numeric', month: '2-digit', day: '2-digit'
+            }) : '방금 전';
+
+            return `
+                <div class="notice-card" style="background: white; border-radius: 20px; padding: 20px; box-shadow: var(--shadow-soft); position:relative;">
+                    ${data.isNew ? '<span style="font-size: 11px; color: var(--primary-color); font-weight: 700; background: var(--primary-light); padding: 4px 10px; border-radius: 10px;">New</span>' : ''}
+                    <h4 style="margin: 12px 0 8px; font-size: 16px; color:#333;">${data.title}</h4>
+                    <p style="font-size: 13px; color: var(--text-dim); line-height: 1.5; word-break: break-all;">${data.content}</p>
+                    <p style="font-size: 11px; color: #ccc; margin-top: 12px;">${dateStr}</p>
+                    ${currentUser && currentUser.role === 'developer' ? `
+                        <button onclick="deleteNotice('${doc.id}')" style="position:absolute; top:20px; right:20px; background:none; border:none; color:#FF6B6B; cursor:pointer;">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+    } catch (error) {
+        console.error("공지 로딩 오류:", error);
+        list.innerHTML = '<p style="text-align:center; padding:40px; color:#FF6B6B;">공지사항을 가져오는 데 실패했습니다.</p>';
+    }
+}
+
+async function deleteNotice(id) {
+    if (confirm('이 공지사항을 삭제할까요?')) {
+        try {
+            await db.collection('notices').doc(id).delete();
+            loadAnnouncements();
+        } catch (error) {
+            alert('삭제 중에 오류가 발생했습니다.');
+        }
+    }
+}
+
+// Payment Functions
+function selectPayMethod(el) {
+    document.querySelectorAll('.pay-method-card').forEach(card => card.classList.remove('active'));
+    el.classList.add('active');
+}
+
+function processPayment() {
+    const agree = document.getElementById('pay-agree').checked;
+    if (!agree) {
+        alert('결제 약관에 동의해 주세요.');
+        return;
+    }
+
+    // 결제 시뮬레이션
+    const btn = event.currentTarget;
+    const originalContent = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 결제 처리 중...';
+
+    setTimeout(() => {
+        navigateTo('success');
+    }, 1500);
+}
+
+// Global scope expose
+window.handleProfilePhotoChange = handleProfilePhotoChange;
+window.saveUserProfile = saveUserProfile;
+window.toggleSetting = toggleSetting;
+window.submitNotice = submitNotice;
+window.deleteNotice = deleteNotice;
+window.selectPayMethod = selectPayMethod;
+window.processPayment = processPayment;
+
 // Initial Rendering
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. 로그인 화면 먼저 보여주기
-    navigateTo('login');
+    // 1. URL 파라미터 확인 (쿼리문 ?m= 혹은 해시 #m= 모두 지원)
+    const urlParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+
+    const mIdRaw = urlParams.get('m') || hashParams.get('m');
+    const view = urlParams.get('v') || hashParams.get('v');
 
     // 2. 백그라운드에서 Firebase 데이터 불러오기
     await syncMentorsWithFirebase();
+
+    // 3. 파라미터에 따라 초기 화면 결정
+    if (mIdRaw) {
+        // 대소문자 구분 없이 멘토 데이터 매칭
+        const mentorKey = Object.keys(mentorsData).find(
+            key => key.toLowerCase() === mIdRaw.toLowerCase()
+        );
+
+        if (mentorKey) {
+            openMentor(mentorKey);
+            return;
+        }
+    }
+
+    if (view) {
+        navigateTo(view);
+    } else {
+        navigateTo('login');
+    }
 });
 

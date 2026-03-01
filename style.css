@@ -524,6 +524,175 @@ button:active {
     color: var(--primary-color);
 }
 
+/* --- Settings Screen Improvements --- */
+.profile-avatar-wrapper {
+    position: relative;
+    width: 65px;
+    height: 65px;
+}
+
+.settings-profile-img {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #f0f0f0;
+    border: 2px solid #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.camera-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 24px;
+    height: 24px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.camera-badge:active {
+    transform: scale(0.9);
+}
+
+.settings-item {
+    padding: 20px;
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.settings-item:active {
+    background-color: #f9f9f9;
+}
+
+.settings-item i.fa-chevron-right {
+    color: #ccc;
+    font-size: 12px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.settings-item:active i.fa-chevron-right {
+    transform: translateX(3px);
+    color: var(--primary-color);
+}
+
+/* --- Toggle Switch --- */
+.toggle-switch {
+    width: 48px;
+    height: 26px;
+    background-color: #e0e0e0;
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-switch.active {
+    background-color: var(--primary-color);
+}
+
+.toggle-switch.active::after {
+    transform: translateX(22px);
+}
+
+/* --- Payment Screen Styles --- */
+.payment-footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 0 14px;
+    background: linear-gradient(to top, white 80%, rgba(255, 255, 255, 0));
+    z-index: 10;
+}
+
+.btn-payment {
+    width: 100%;
+    height: 60px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-premium);
+    transition: all 0.3s ease;
+}
+
+.btn-payment:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.pay-method-card {
+    background: white;
+    border: 1.5px solid #eee;
+    border-radius: 16px;
+    padding: 18px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pay-method-card i,
+.pay-method-card img {
+    font-size: 22px;
+    color: #888;
+}
+
+.pay-method-card span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+}
+
+.pay-method-card.active {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.pay-method-card.active i {
+    color: var(--primary-color);
+}
+
+.pay-method-card.active span {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
 /* --- Profile Screen Styles --- */
 .back-btn {
     width: 40px;
