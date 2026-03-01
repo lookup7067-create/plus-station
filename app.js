@@ -172,6 +172,12 @@ const screens = {
             <section class="greeting-section">
                 <h1 class="greeting-title">오늘 당신의<br><span>마음은 어떤가요?</span></h1>
                 <p class="greeting-subtitle">고민 중인 카테고리를 선택해 주세요.</p>
+                
+                ${currentUser && currentUser.role === 'developer' ? `
+                <button class="btn-admin-panel" onclick="navigateTo('adminDashboard')" style="margin-top: 16px; width: 100%; height: 50px; background: var(--text-main); color: white; border-radius: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow-soft);">
+                    <i class="fa-solid fa- screwdriver-wrench"></i> 예약 현황 관리 (관리자)
+                </button>
+                ` : ''}
             </section>
             
             <div class="category-list">
@@ -817,6 +823,24 @@ const screens = {
                 </div>
             </nav>
         </div>
+    `,
+    adminDashboard: () => `
+        <div class="screen admin-screen fade-in">
+            <header class="header">
+                <button class="back-btn" onclick="navigateTo('category')">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 class="title-center">전체 예약 현황 (관리자)</h2>
+                <div style="width:40px;"></div>
+            </header>
+
+            <div class="admin-content p-3" id="admin-booking-list">
+                <div style="text-align: center; padding: 100px 20px;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--primary-color);"></i>
+                    <p style="margin-top: 16px; color: var(--text-dim);">예약 데이터를 불러오는 중...</p>
+                </div>
+            </div>
+        </div>
     `
 };
 
@@ -847,14 +871,32 @@ function navigateTo(screenId) {
             successLabel.innerText = `${formattedDate} · ${selectedTime}`;
         }
 
-        // 히스토리에 추가
-        bookingHistory.push({
+        // 예약 객체 생성
+        const newBooking = {
+            id: 'B' + Date.now(),
             date: formattedDate,
             time: selectedTime,
             service: currentMentor.id === 'healing' ? '마음 치유 세션' : currentMentor.title + ' 상담',
             mentorName: currentMentor.name,
-            location: selectedLocation
-        });
+            mentorId: currentMentor.id,
+            userName: currentUser.name,
+            location: selectedLocation,
+            address: selectedAddress,
+            status: '대기', // 기본 상태
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        // 로컬 히스토리에 추가
+        bookingHistory.push(newBooking);
+
+        // --- Firebase 예약 저장 ---
+        db.collection('bookings').doc(newBooking.id).set(newBooking)
+            .then(() => console.log("예약 정보가 클라우드에 저장되었습니다."))
+            .catch(err => console.error("예약 저장 오류:", err));
+    }
+
+    if (screenId === 'adminDashboard') {
+        loadAllBookings();
     }
 
     if (screenId === 'qrShare') {
@@ -1089,6 +1131,74 @@ window.updateLocation = updateLocation;
 window.updateAddress = updateAddress;
 window.selectTime = selectTime;
 window.loginWithEmail = loginWithEmail;
+window.updateBookingStatus = updateBookingStatus;
+
+// --- Admin Dashboard Logic ---
+async function loadAllBookings() {
+    const listContainer = document.getElementById('admin-booking-list');
+    if (!listContainer) return;
+
+    try {
+        const snapshot = await db.collection('bookings').orderBy('timestamp', 'desc').get();
+        if (snapshot.empty) {
+            listContainer.innerHTML = `
+                <div style="text-align: center; padding: 100px 20px; color: var(--text-light);">
+                    <i class="fa-regular fa-calendar-xmark" style="font-size: 48px; margin-bottom: 16px;"></i>
+                    <p>현재 접수된 예약이 없습니다.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        snapshot.forEach(doc => {
+            const booking = doc.data();
+            const statusColor = booking.status === '완료' ? '#aaa' : 'var(--primary-color)';
+
+            html += `
+                <div class="admin-booking-card" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); border-left: 5px solid ${statusColor};">
+                    <div style="display:flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-size: 12px; color: var(--text-dim);">${booking.id}</span>
+                        <select onchange="updateBookingStatus('${doc.id}', this.value)" style="border:none; background: #f8f9fa; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight:700;">
+                            <option value="대기" ${booking.status === '대기' ? 'selected' : ''}>⏳ 대기</option>
+                            <option value="확정" ${booking.status === '확정' ? 'selected' : ''}>✅ 확정</option>
+                            <option value="완료" ${booking.status === '완료' ? 'selected' : ''}>🏁 완료</option>
+                        </select>
+                    </div>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">${booking.userName} 님의 예약</h3>
+                    <p style="font-size: 14px; margin-bottom: 12px; color: var(--primary-dark); font-weight:700;">${booking.service} (멘토: ${booking.mentorName})</p>
+                    
+                    <div style="background: #fdfcf0; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.6;">
+                        <p>📅 <strong>날짜:</strong> ${booking.date}</p>
+                        <p>⏰ <strong>시간:</strong> ${booking.time}</p>
+                        <p>📍 <strong>장소:</strong> ${booking.location}</p>
+                        <p>🏠 <strong>주소:</strong> ${booking.address}</p>
+                    </div>
+                    
+                    <div style="margin-top: 12px; display: flex; gap: 8px;">
+                        <button class="btn-secondary" style="height: 36px; font-size: 12px; flex: 1;" onclick="alert('${booking.userName} 님께 연락 중...')">연락하기</button>
+                        <button class="btn-primary" style="height: 36px; font-size: 12px; flex: 1; background: #eee; color: #666; box-shadow:none;" onclick="alert('메모 기능 준비 중입니다.')">메모</button>
+                    </div>
+                </div>
+            `;
+        });
+        listContainer.innerHTML = html;
+    } catch (err) {
+        console.error("예약 목록 불러오기 실패:", err);
+        listContainer.innerHTML = `<p style="text-align:center; color:red; padding: 40px;">데이터를 불러오는 중 오류가 발생했습니다.</p>`;
+    }
+}
+
+async function updateBookingStatus(bookingId, newStatus) {
+    try {
+        await db.collection('bookings').doc(bookingId).update({ status: newStatus });
+        alert(`상태가 [${newStatus}]로 업데이트되었습니다.`);
+        loadAllBookings(); // 새로고침
+    } catch (err) {
+        console.error("상태 업데이트 실패:", err);
+        alert("상태 업데이트에 실패했습니다.");
+    }
+}
 
 // --- Login Simulation ---
 function handleLogin(provider) {
