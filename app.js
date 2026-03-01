@@ -169,13 +169,15 @@ const screens = {
                 </div>
             </header>
             
-            <section class="greeting-section">
-                <h1 class="greeting-title">오늘 당신의<br><span>마음은 어떤가요?</span></h1>
-                <p class="greeting-subtitle">고민 중인 카테고리를 선택해 주세요.</p>
-                
                 ${currentUser && currentUser.role === 'developer' ? `
                 <button class="btn-admin-panel" onclick="navigateTo('adminDashboard')" style="margin-top: 16px; width: 100%; height: 50px; background: var(--text-main); color: white; border-radius: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow-soft);">
-                    <i class="fa-solid fa- screwdriver-wrench"></i> 예약 현황 관리 (관리자)
+                    <i class="fa-solid fa-screwdriver-wrench"></i> 예약 현황 관리 (관리자)
+                </button>
+                ` : ''}
+
+                ${currentUser && currentUser.role === 'mentor' ? `
+                <button class="btn-admin-panel" onclick="navigateTo('mentorDashboard')" style="margin-top: 16px; width: 100%; height: 50px; background: var(--primary-dark); color: white; border-radius: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow-soft);">
+                    <i class="fa-solid fa-clipboard-list"></i> 내 예약 확인 (멘토 전용)
                 </button>
                 ` : ''}
             </section>
@@ -841,6 +843,24 @@ const screens = {
                 </div>
             </div>
         </div>
+    `,
+    mentorDashboard: () => `
+        <div class="screen admin-screen fade-in">
+            <header class="header">
+                <button class="back-btn" onclick="navigateTo('category')">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 class="title-center">내 파트 예약 현황 (멘토)</h2>
+                <div style="width:40px;"></div>
+            </header>
+
+            <div class="admin-content p-3" id="mentor-booking-list">
+                <div style="text-align: center; padding: 100px 20px;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--primary-color);"></i>
+                    <p style="margin-top: 16px; color: var(--text-dim);">상담 내역을 불러오는 중...</p>
+                </div>
+            </div>
+        </div>
     `
 };
 
@@ -897,6 +917,10 @@ function navigateTo(screenId) {
 
     if (screenId === 'adminDashboard') {
         loadAllBookings();
+    }
+
+    if (screenId === 'mentorDashboard') {
+        loadMentorBookings();
     }
 
     if (screenId === 'qrShare') {
@@ -1193,10 +1217,74 @@ async function updateBookingStatus(bookingId, newStatus) {
     try {
         await db.collection('bookings').doc(bookingId).update({ status: newStatus });
         alert(`상태가 [${newStatus}]로 업데이트되었습니다.`);
-        loadAllBookings(); // 새로고침
+
+        // 대시보드 새로고침 (어느 화면이냐에 따라)
+        if (currentState === 'adminDashboard') loadAllBookings();
+        if (currentState === 'mentorDashboard') loadMentorBookings();
     } catch (err) {
         console.error("상태 업데이트 실패:", err);
         alert("상태 업데이트에 실패했습니다.");
+    }
+}
+
+// --- Mentor Dashboard Logic ---
+async function loadMentorBookings() {
+    const listContainer = document.getElementById('mentor-booking-list');
+    if (!listContainer || !currentUser || !currentUser.mentorId) return;
+
+    try {
+        // 본인의 mentorId와 일치하는 예약만 가져오기
+        const snapshot = await db.collection('bookings')
+            .where('mentorId', '==', currentUser.mentorId)
+            .orderBy('timestamp', 'desc')
+            .get();
+
+        if (snapshot.empty) {
+            listContainer.innerHTML = `
+                <div style="text-align: center; padding: 100px 20px; color: var(--text-light);">
+                    <i class="fa-regular fa-calendar-check" style="font-size: 48px; margin-bottom: 16px;"></i>
+                    <p>아직 담당 파트에 들어온<br>예약이 없습니다.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = `
+            <div class="mentor-badge-info" style="background: var(--primary-light); color: var(--primary-dark); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 13px; font-weight: 700;">
+                📢 ${mentorsData[currentUser.mentorId].name} 멘토님,<br>현재 담당 파트 예약 건수: ${snapshot.size}건
+            </div>
+        `;
+
+        snapshot.forEach(doc => {
+            const booking = doc.data();
+            const statusColor = booking.status === '완료' ? '#aaa' : 'var(--primary-color)';
+
+            html += `
+                <div class="admin-booking-card" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); border-left: 5px solid ${statusColor};">
+                    <div style="display:flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-size: 11px; color: var(--text-dim);">${booking.id}</span>
+                        <select onchange="updateBookingStatus('${doc.id}', this.value)" style="border:none; background: #f8f9fa; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight:700;">
+                            <option value="대기" ${booking.status === '대기' ? 'selected' : ''}>⏳ 대기</option>
+                            <option value="확정" ${booking.status === '확정' ? 'selected' : ''}>✅ 확정</option>
+                            <option value="완료" ${booking.status === '완료' ? 'selected' : ''}>🏁 완료</option>
+                        </select>
+                    </div>
+                    <h3 style="font-size: 16px; margin-bottom: 4px;">${booking.userName} 님</h3>
+                    
+                    <div style="margin-top: 10px; font-size: 13px; line-height: 1.6;">
+                        <p>📅 <strong>날짜:</strong> ${booking.date}</p>
+                        <p>⏰ <strong>시간:</strong> ${booking.time}</p>
+                        <p>📍 <strong>장소:</strong> ${booking.location}</p>
+                    </div>
+                    
+                    <button class="btn-primary mt-2" style="height: 40px; font-size: 13px; background: var(--primary-dark);" onclick="alert('${booking.userName} 님께 곧 메시지를 전송합니다.')">상담 수락 및 연락</button>
+                </div>
+            `;
+        });
+        listContainer.innerHTML = html;
+    } catch (err) {
+        console.error("멘토 예약 목록 불러오기 실패:", err);
+        listContainer.innerHTML = `<p style="text-align:center; color:red; padding: 40px;">데이터를 불러오는 중 오류가 발생했습니다.<br><small>Firebase 인덱스 생성이 필요할 수 있습니다.</small></p>`;
     }
 }
 
@@ -1230,11 +1318,32 @@ function loginWithEmail() {
         return;
     }
 
-    // 개발자 계정 시뮬레이션: lookup10@naver.com / lookup1004
+    // --- 계정 시뮬레이션 확장 ---
+
+    // 1. 개발자(관리자)
     if (email === 'lookup10@naver.com' && pw === 'lookup1004') {
         currentUser = { name: '개발자님', role: 'developer' };
-        alert('개발자 계정으로 로그인되었습니다. 프로필 수정 권한이 활성화됩니다.');
-    } else {
+        alert('개발자 계정으로 로그인되었습니다. 모든 예약 열람 및 수정 권한이 활성화됩니다.');
+    }
+    // 2. 멘토 계정들 (비번: mentor123 공통)
+    else if (email.endsWith('@plus.com') && pw === 'mentor123') {
+        const category = email.split('@')[0];
+        const categories = ['realEstate', 'healing', 'legal', 'tax', 'insurance', 'edu'];
+
+        if (categories.includes(category)) {
+            currentUser = {
+                name: mentorsData[category].name.split('&')[0].trim() + ' 멘토님',
+                role: 'mentor',
+                mentorId: category
+            };
+            alert(`${currentUser.name}으로 오신 것을 환영합니다. 담당 파트 예약을 관리해 보세요.`);
+        } else {
+            currentUser = { name: '일반 사용자', role: 'user' };
+            alert('멘토 계정이 확인되지 않아 일반 사용자로 로그인되었습니다.');
+        }
+    }
+    // 3. 일반 사용자
+    else {
         currentUser = { name: '이메일 사용자', role: 'user' };
         alert('일반 사용자로 로그인되었습니다.');
     }
