@@ -29,6 +29,7 @@ let selectedLocation = "플러스 커뮤니티 라운지"; // 기본 장소
 let selectedAddress = "서울특별시 마포구 연남동"; // 기본 주소
 let tempImageData = null; // 업로드용 임시 이미지 데이터
 let bookingHistory = []; // 예약 내역 저장 공간
+let bookedTimes = []; // 이미 예약된 시간들을 담는 변수
 
 // Mentors Data
 const mentorsData = {
@@ -512,9 +513,17 @@ const screens = {
     `,
     booking: () => {
         const timeSlots = ["오전 10:00", "오전 11:30", "오후 01:00", "오후 02:30", "오후 04:00", "오후 05:30"];
-        let timeChips = timeSlots.map(time =>
-            `<button class="time-chip ${selectedTime === time ? 'active' : ''}" onclick="selectTime('${time}')">${time}</button>`
-        ).join('');
+        let timeChips = timeSlots.map(time => {
+            const isBooked = bookedTimes.includes(time);
+            return `
+                <button class="time-chip ${selectedTime === time ? 'active' : ''} ${isBooked ? 'booked' : ''}" 
+                        onclick="${isBooked ? '' : `selectTime('${time}')`}"
+                        ${isBooked ? 'disabled' : ''}>
+                    ${time}
+                    ${isBooked ? '<span style="display:block; font-size:9px; opacity:0.7;">(예약완료)</span>' : ''}
+                </button>
+            `;
+        }).join('');
 
         return `
         <div class="screen booking-screen fade-in">
@@ -881,6 +890,7 @@ function navigateTo(screenId) {
 
     if (screenId === 'booking') {
         renderCalendar();
+        checkBookedTimes(); // 예약된 시간대 불러오기
     }
 
     if (screenId === 'success') {
@@ -910,9 +920,23 @@ function navigateTo(screenId) {
         bookingHistory.push(newBooking);
 
         // --- Firebase 예약 저장 ---
-        db.collection('bookings').doc(newBooking.id).set(newBooking)
-            .then(() => console.log("예약 정보가 클라우드에 저장되었습니다."))
-            .catch(err => console.error("예약 저장 오류:", err));
+        // 최종 중복 체크 (결제 직전 한 번 더 확인)
+        db.collection('bookings')
+            .where('mentorId', '==', currentMentor.id)
+            .where('date', '==', formattedDate)
+            .where('time', '==', selectedTime)
+            .get()
+            .then(querySnapshot => {
+                if (!querySnapshot.empty) {
+                    alert('앗! 그새 다른 분이 먼저 예약하셨네요. 다른 시간을 선택해 주세요.');
+                    navigateTo('booking');
+                    return;
+                }
+
+                db.collection('bookings').doc(newBooking.id).set(newBooking)
+                    .then(() => console.log("예약 정보가 클라우드에 저장되었습니다."))
+                    .catch(err => console.error("예약 저장 오류:", err));
+            });
     }
 
     if (screenId === 'adminDashboard') {
@@ -1140,7 +1164,9 @@ function changeMonth(offset) {
 
 function selectDay(day) {
     selectedDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
+    selectedTime = null; // 날짜가 바뀌면 선택된 시간 초기화
     renderCalendar();
+    checkBookedTimes(); // 날짜 선택 시 즉시 중복 시간 체크
 }
 
 // Global exposure
@@ -1156,6 +1182,38 @@ window.updateAddress = updateAddress;
 window.selectTime = selectTime;
 window.loginWithEmail = loginWithEmail;
 window.updateBookingStatus = updateBookingStatus;
+window.checkBookedTimes = checkBookedTimes;
+
+// --- Double Booking Prevention ---
+async function checkBookedTimes() {
+    if (!currentMentor || !selectedDate) return;
+
+    const formattedDate = `${selectedDate.getFullYear()}년 ${selectedDate.getMonth() + 1}월 ${selectedDate.getDate()}일`;
+
+    try {
+        const snapshot = await db.collection('bookings')
+            .where('mentorId', '==', currentMentor.id)
+            .where('date', '==', formattedDate)
+            .get();
+
+        bookedTimes = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.status !== '취소') {
+                bookedTimes.push(data.time);
+            }
+        });
+
+        // 현재 화면이 예약 화면이라면 리렌더링하여 버튼 비활성화 반영
+        if (currentState === 'booking') {
+            const templateFn = screens['booking'];
+            app.innerHTML = templateFn();
+            renderCalendar();
+        }
+    } catch (err) {
+        console.error("예약 내역 조회 오류:", err);
+    }
+}
 
 // --- Admin Dashboard Logic ---
 async function loadAllBookings() {
