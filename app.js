@@ -2,6 +2,7 @@ const app = document.getElementById('app');
 
 // State Management
 let currentState = 'login';
+let currentUser = null; // { name: '...', role: 'user' | 'developer' }
 let viewDate = new Date(); // 달력에서 보여지는 달
 let selectedDate = new Date(); // 선택된 날짜
 let currentMentor = null; // 현재 선택된 멘토 데이터
@@ -125,7 +126,7 @@ const screens = {
                     <a href="#" style="font-size: 13px; color: var(--text-dim); text-decoration: none;">비밀번호 찾기</a>
                 </div>
                 
-                <button class="btn-primary mt-3" onclick="navigateTo('category')">로그인</button>
+                <button class="btn-primary mt-3" onclick="loginWithEmail()">로그인</button>
                 
                 <div style="text-align: center; margin-top: 32px;">
                     <p style="font-size: 14px; color: var(--text-dim);">계정이 없으신가요? <a href="#" style="color: var(--primary-color); font-weight: 700; text-decoration: none;">회원가입</a></p>
@@ -251,9 +252,11 @@ const screens = {
                 </button>
                 <h2 class="title-center">멘토 프로필</h2>
                 <div style="display:flex; gap: 8px;">
+                    ${currentUser && currentUser.role === 'developer' ? `
                     <button class="share-btn" onclick="navigateTo('editMentor')" title="수정하기">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
+                    ` : ''}
                     <button class="share-btn" onclick="shareMentorProfile()">
                         <i class="fa-solid fa-share-nodes"></i>
                     </button>
@@ -282,7 +285,9 @@ const screens = {
                     </div>
                 </div>
 
-                <div class="mentor-stats clickable-stats" onclick="navigateTo('editMentor')" title="클릭하여 수정">
+                <div class="mentor-stats ${currentUser && currentUser.role === 'developer' ? 'clickable-stats' : ''}" 
+                     onclick="${currentUser && currentUser.role === 'developer' ? "navigateTo('editMentor')" : ""}" 
+                     title="${currentUser && currentUser.role === 'developer' ? '클릭하여 수정' : ''}">
                     <div class="stat-box">
                         <p class="stat-label">상담 횟수</p>
                         <p class="stat-value-large">${currentMentor.stats.sessions}</p>
@@ -293,7 +298,7 @@ const screens = {
                     </div>
                     <div class="stat-box" style="position:relative;">
                         <p class="stat-label">경력</p>
-                        <p class="stat-value-large">${currentMentor.stats.career} <i class="fa-solid fa-pen" style="font-size:10px; color:var(--primary-color); vertical-align:middle; cursor:pointer;"></i></p>
+                        <p class="stat-value-large">${currentMentor.stats.career} ${currentUser && currentUser.role === 'developer' ? '<i class="fa-solid fa-pen" style="font-size:10px; color:var(--primary-color); vertical-align:middle; cursor:pointer;"></i>' : ''}</p>
                     </div>
                 </div>
 
@@ -799,6 +804,14 @@ const screens = {
 
 // Navigation Function
 function navigateTo(screenId) {
+    // 권한 체크: 수정 페이지는 개발자만 접근 가능
+    if (screenId === 'editMentor') {
+        if (!currentUser || currentUser.role !== 'developer') {
+            alert('개발자(관리자) 권한이 필요한 페이지입니다.');
+            return;
+        }
+    }
+
     const templateFn = screens[screenId];
     app.innerHTML = templateFn();
     currentState = screenId;
@@ -1048,6 +1061,7 @@ window.shareMentorProfile = shareMentorProfile;
 window.updateLocation = updateLocation;
 window.updateAddress = updateAddress;
 window.selectTime = selectTime;
+window.loginWithEmail = loginWithEmail;
 
 // --- Login Simulation ---
 function handleLogin(provider) {
@@ -1064,9 +1078,31 @@ function handleLogin(provider) {
 
     // 1.5초 후 로그인 완료 처리
     setTimeout(() => {
+        currentUser = { name: '일반 사용자', role: 'user' };
         alert(`${provider} 계정으로 로그인이 완료되었습니다!\n플러스 정거장에 오신 것을 환영합니다. 😊`);
         navigateTo('category');
     }, 1500);
+}
+
+function loginWithEmail() {
+    const email = document.getElementById('login-email').value;
+    const pw = document.getElementById('login-pw').value;
+
+    if (!email) {
+        alert('이메일을 입력해 주세요.');
+        return;
+    }
+
+    // 개발자 계정 시뮬레이션: lookup10@naver.com / lookup1004
+    if (email === 'lookup10@naver.com' && pw === 'lookup1004') {
+        currentUser = { name: '개발자님', role: 'developer' };
+        alert('개발자 계정으로 로그인되었습니다. 프로필 수정 권한이 활성화됩니다.');
+    } else {
+        currentUser = { name: '이메일 사용자', role: 'user' };
+        alert('일반 사용자로 로그인되었습니다.');
+    }
+
+    navigateTo('category');
 }
 
 window.handleLogin = handleLogin;
