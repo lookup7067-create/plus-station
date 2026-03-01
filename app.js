@@ -1236,14 +1236,25 @@ async function loadUserBookings() {
 
         let html = '<div class="history-list">';
         bookings.forEach(booking => {
-            const statusBg = booking.status === '완료' ? '#eee' : 'var(--primary-light)';
-            const statusColor = booking.status === '완료' ? '#999' : 'var(--primary-dark)';
+            const isCancelled = booking.status === '취소';
+            const isCompleted = booking.status === '완료';
+
+            let statusBg = 'var(--primary-light)';
+            let statusColor = 'var(--primary-dark)';
+
+            if (isCancelled) {
+                statusBg = '#FFEEEE';
+                statusColor = '#FF6B6B';
+            } else if (isCompleted) {
+                statusBg = '#eee';
+                statusColor = '#999';
+            }
 
             html += `
-                <div class="history-item" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-soft);">
+                <div class="history-item" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-soft); ${isCancelled ? 'opacity: 0.7;' : ''}">
                     <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                         <div>
-                            <h4 style="font-size: 16px; margin-bottom: 4px;">${booking.mentorName} 멘토</h4>
+                            <h4 style="font-size: 16px; margin-bottom: 4px; ${isCancelled ? 'text-decoration: line-through;' : ''}">${booking.mentorName} 멘토</h4>
                             <p style="font-size: 12px; color: var(--primary-dark); font-weight: 700;">${booking.service}</p>
                         </div>
                         <span style="background: ${statusBg}; color: ${statusColor}; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 20px;">${booking.status}</span>
@@ -1252,10 +1263,10 @@ async function loadUserBookings() {
                         <p style="display:flex; align-items:center; gap:8px;"><i class="fa-regular fa-clock" style="color:var(--primary-color);"></i> ${booking.date} · ${booking.time}</p>
                         <p style="display:flex; align-items:start; gap:8px; margin-top: 6px;"><i class="fa-solid fa-location-dot" style="color:var(--primary-color);"></i> <span>${booking.location}<br><small style="color:var(--text-light);">${booking.address}</small></span></p>
                     </div>
-                    ${booking.status !== '완료' ? `
+                    ${(!isCancelled && !isCompleted) ? `
                     <div style="margin-top:16px; display:flex; gap:8px;">
                         <button style="flex:1; height:34px; border-radius:10px; border:1px solid #eee; background:white; font-size:12px; font-weight:600; color:var(--text-dim);" onclick="alert('준비물: 간단한 본인 소개와 궁금한 점을 메모해오세요!')">준비물 확인</button>
-                        <button style="flex:1; height:34px; border-radius:10px; border:1px solid #eee; background:white; font-size:12px; font-weight:600; color:#FF6B6B;" onclick="alert('취소는 관리자에게 문의해주세요.')">예약 취소</button>
+                        <button style="flex:1; height:34px; border-radius:10px; border:1px solid #eee; background:white; font-size:12px; font-weight:600; color:#FF6B6B;" onclick="cancelBooking('${booking.id}')">예약 취소</button>
                     </div>
                     ` : ''}
                 </div>
@@ -1266,6 +1277,22 @@ async function loadUserBookings() {
     } catch (err) {
         console.error("사용자 예약 로드 실패:", err);
         listContainer.innerHTML = `<p style="padding:40px; text-align:center; color:red;">데이터를 불러오지 못했습니다.</p>`;
+    }
+}
+
+async function cancelBooking(bookingId) {
+    if (!confirm('정말로 이 예약을 취소하시겠습니까?')) return;
+
+    try {
+        await db.collection('bookings').doc(bookingId).update({
+            status: '취소',
+            cancelledAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert('예약이 성공적으로 취소되었습니다.');
+        loadUserBookings(); // 내역 새로고침
+    } catch (err) {
+        console.error("예약 취소 오류:", err);
+        alert('예약 취소 중 오류가 발생했습니다.');
     }
 }
 
@@ -1337,6 +1364,7 @@ async function loadAllBookings() {
                             <option value="대기" ${booking.status === '대기' ? 'selected' : ''}>⏳ 대기</option>
                             <option value="확정" ${booking.status === '확정' ? 'selected' : ''}>✅ 확정</option>
                             <option value="완료" ${booking.status === '완료' ? 'selected' : ''}>🏁 완료</option>
+                            <option value="취소" ${booking.status === '취소' ? 'selected' : ''}>❌ 취소</option>
                         </select>
                     </div>
                     <h3 style="font-size: 18px; margin-bottom: 8px;">${booking.userName} 님의 예약</h3>
@@ -1422,6 +1450,7 @@ async function loadMentorBookings() {
                             <option value="대기" ${booking.status === '대기' ? 'selected' : ''}>⏳ 대기</option>
                             <option value="확정" ${booking.status === '확정' ? 'selected' : ''}>✅ 확정</option>
                             <option value="완료" ${booking.status === '완료' ? 'selected' : ''}>🏁 완료</option>
+                            <option value="취소" ${booking.status === '취소' ? 'selected' : ''}>❌ 취소</option>
                         </select>
                     </div>
                     <h3 style="font-size: 16px; margin-bottom: 4px;">${booking.userName} 님</h3>
