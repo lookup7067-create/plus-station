@@ -1919,7 +1919,7 @@ async function loadAnnouncements() {
                 <div class="notice-card" style="background: white; border-radius: 20px; padding: 20px; box-shadow: var(--shadow-soft); position:relative;">
                     ${data.isNew ? '<span style="font-size: 11px; color: var(--primary-color); font-weight: 700; background: var(--primary-light); padding: 4px 10px; border-radius: 10px;">New</span>' : ''}
                     <h4 style="margin: 12px 0 8px; font-size: 16px; color:#333;">${data.title}</h4>
-                    <p style="font-size: 13px; color: var(--text-dim); line-height: 1.5; word-break: break-all;">${data.content}</p>
+                    <p style="font-size: 14px; color: var(--text-main); line-height: 1.6; word-break: break-all; white-space: pre-wrap; margin-top: 12px; margin-bottom: 12px;">${data.content}</p>
                     <p style="font-size: 11px; color: #ccc; margin-top: 12px;">${dateStr}</p>
                     ${currentUser && currentUser.role === 'developer' ? `
                         <button onclick="deleteNotice('${doc.id}')" style="position:absolute; top:20px; right:20px; background:none; border:none; color:#FF6B6B; cursor:pointer;">
