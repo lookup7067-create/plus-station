@@ -783,40 +783,57 @@ const screens = {
         </div>
     `,
     myBookings: () => `
-        <div class="screen bookings-screen fade-in">
+        <div class="screen bookings-screen fade-in" style="background: #F8F9FA;">
             <header class="header">
-                <h2 class="brand-name">내 예약 내역</h2>
-                <div class="profile-icon">
-                    <i class="fa-regular fa-user"></i>
+                <h2 class="brand-name">마이 페이지</h2>
+                <div class="profile-icon" style="background: var(--primary-color); color: white;">
+                    <i class="fa-solid fa-user"></i>
                 </div>
             </header>
 
-            <div class="bookings-content p-3">
-                ${bookingHistory.length === 0 ? `
-                    <div style="text-align: center; padding: 100px 20px;">
-                        <i class="fa-regular fa-calendar-check" style="font-size: 60px; color: var(--primary-light); margin-bottom: 24px; display: block;"></i>
-                        <p style="color: var(--text-dim);">아직 예약된 내역이 없습니다.<br>멘토를 찾아 마음을 나누어 보세요.</p>
-                        <button class="btn-primary mt-3" onclick="navigateTo('category')">멘토 찾기</button>
+            <div class="user-summary p-3" style="background: white; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; box-shadow: var(--shadow-soft);">
+                <div style="display:flex; align-items:center; gap:16px; margin-bottom:10px;">
+                    <div style="width:60px; height:60px; border-radius:50%; background:#eee; overflow:hidden;">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser ? currentUser.name : 'User'}" style="width:100%; height:100%;">
                     </div>
-                ` : `
-                    <div class="history-list">
-                        ${bookingHistory.map(item => `
-                            <div class="history-item" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-soft);">
-                                <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                                    <div>
-                                        <h4 style="font-size: 16px; margin-bottom: 4px;">${item.mentorName}</h4>
-                                        <p style="font-size: 13px; color: var(--primary-dark); font-weight: 600;">${item.location}</p>
-                                    </div>
-                                    <span style="background: var(--primary-light); color: var(--primary-dark); font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 20px;">예약 확정</span>
-                                </div>
-                                <div style="border-top: 1px dashed #eee; padding-top: 12px; font-size: 13px; color: var(--text-dim);">
-                                    <p><i class="fa-regular fa-clock" style="margin-right: 6px;"></i> ${item.date} ${item.time}</p>
-                                    <p style="margin-top: 4px;"><i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> ${item.address}</p>
-                                </div>
-                            </div>
-                        `).join('')}
+                    <div>
+                        <h3 style="font-size:20px;">${currentUser ? currentUser.name : '로그인 세션 만료'}님</h3>
+                        <p style="font-size:13px; color:var(--text-dim);">플러스 정거장과 함께 행복한 하루 되세요!</p>
                     </div>
-                `}
+                </div>
+            </div>
+
+            <div class="bookings-content p-3" id="user-booking-list">
+                <!-- 로딩 중 표시 -->
+                <div style="text-align: center; padding: 60px 20px;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--primary-color);"></i>
+                    <p style="margin-top: 16px; color: var(--text-dim);">나의 예약 내역을 확인하는 중...</p>
+                </div>
+            </div>
+
+            <!-- 안내 섹션 추가 -->
+            <div class="notice-section p-3" style="margin-bottom: 100px;">
+                <h4 style="font-size:16px; margin-bottom:16px; color:var(--text-main); padding-left:4px;">💡 예약 전 확인해 주세요!</h4>
+                
+                <div class="notice-card" style="background: white; border-radius: 20px; padding: 16px; margin-bottom: 12px; border-left: 4px solid var(--accent-color);">
+                    <div style="display:flex; gap:12px;">
+                        <i class="fa-solid fa-lightbulb" style="color:var(--accent-color); font-size:18px;"></i>
+                        <div>
+                            <p style="font-weight:700; font-size:14px; margin-bottom:4px;">상담 준비물</p>
+                            <p style="font-size:12px; color:var(--text-dim); line-height:1.5;">필요한 서류나 필기도구를 미리 챙겨주시면 더욱 알찬 상담이 가능합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notice-card" style="background: white; border-radius: 20px; padding: 16px; border-left: 4px solid var(--primary-color);">
+                    <div style="display:flex; gap:12px;">
+                        <i class="fa-solid fa-circle-exclamation" style="color:var(--primary-color); font-size:18px;"></i>
+                        <div>
+                            <p style="font-weight:700; font-size:14px; margin-bottom:4px;">노쇼 및 취소 규정</p>
+                            <p style="font-size:12px; color:var(--text-dim); line-height:1.5;">예약 시간 24시간 전까지는 취소가 가능합니다. 멘토님과의 소중한 시간을 지켜주세요!</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <nav class="bottom-nav">
@@ -937,6 +954,10 @@ function navigateTo(screenId) {
                     .then(() => console.log("예약 정보가 클라우드에 저장되었습니다."))
                     .catch(err => console.error("예약 저장 오류:", err));
             });
+    }
+
+    if (screenId === 'myBookings') {
+        loadUserBookings();
     }
 
     if (screenId === 'adminDashboard') {
@@ -1183,6 +1204,65 @@ window.selectTime = selectTime;
 window.loginWithEmail = loginWithEmail;
 window.updateBookingStatus = updateBookingStatus;
 window.checkBookedTimes = checkBookedTimes;
+window.loadUserBookings = loadUserBookings;
+
+// --- User MyPage Logic ---
+async function loadUserBookings() {
+    const listContainer = document.getElementById('user-booking-list');
+    if (!listContainer || !currentUser) return;
+
+    try {
+        const snapshot = await db.collection('bookings')
+            .where('userName', '==', currentUser.name)
+            .orderBy('timestamp', 'desc')
+            .get();
+
+        if (snapshot.empty) {
+            listContainer.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <i class="fa-regular fa-calendar-xmark" style="font-size: 50px; color: var(--primary-light); margin-bottom: 16px; display: block;"></i>
+                    <p style="color: var(--text-dim);">아직 신청하신 예약이 없습니다.<br>멘토님들이 당신을 기다리고 있어요!</p>
+                    <button class="btn-primary mt-3" style="width: auto; padding: 0 32px;" onclick="navigateTo('category')">상담 신청하기</button>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '<div class="history-list">';
+        snapshot.forEach(doc => {
+            const booking = doc.data();
+            const statusBg = booking.status === '완료' ? '#eee' : 'var(--primary-light)';
+            const statusColor = booking.status === '완료' ? '#999' : 'var(--primary-dark)';
+
+            html += `
+                <div class="history-item" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-soft);">
+                    <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                        <div>
+                            <h4 style="font-size: 16px; margin-bottom: 4px;">${booking.mentorName} 멘토</h4>
+                            <p style="font-size: 12px; color: var(--primary-dark); font-weight: 700;">${booking.service}</p>
+                        </div>
+                        <span style="background: ${statusBg}; color: ${statusColor}; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 20px;">${booking.status}</span>
+                    </div>
+                    <div style="border-top: 1px dashed #eee; padding-top: 12px; font-size: 13px; color: var(--text-dim);">
+                        <p style="display:flex; align-items:center; gap:8px;"><i class="fa-regular fa-clock" style="color:var(--primary-color);"></i> ${booking.date} · ${booking.time}</p>
+                        <p style="display:flex; align-items:start; gap:8px; margin-top: 6px;"><i class="fa-solid fa-location-dot" style="color:var(--primary-color);"></i> <span>${booking.location}<br><small style="color:var(--text-light);">${booking.address}</small></span></p>
+                    </div>
+                    ${booking.status !== '완료' ? `
+                    <div style="margin-top:16px; display:flex; gap:8px;">
+                        <button style="flex:1; height:34px; border-radius:10px; border:1px solid #eee; background:white; font-size:12px; font-weight:600; color:var(--text-dim);" onclick="alert('준비물: 간단한 본인 소개와 궁금한 점을 메모해오세요!')">준비물 확인</button>
+                        <button style="flex:1; height:34px; border-radius:10px; border:1px solid #eee; background:white; font-size:12px; font-weight:600; color:#FF6B6B;" onclick="alert('취소는 관리자에게 문의해주세요.')">예약 취소</button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+        html += '</div>';
+        listContainer.innerHTML = html;
+    } catch (err) {
+        console.error("사용자 예약 로드 실패:", err);
+        listContainer.innerHTML = `<p style="padding:40px; text-align:center; color:red;">데이터를 불러오지 못했습니다.</p>`;
+    }
+}
 
 // --- Double Booking Prevention ---
 async function checkBookedTimes() {
