@@ -121,31 +121,31 @@ const screens = {
     `,
     emailLogin: () => `
         <div class="screen email-login-screen fade-in">
-            <header class="header">
+            <header class="header" style="background:transparent; box-shadow:none;">
                 <button class="back-btn" onclick="navigateTo('login')">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
             </header>
             
-            <div class="email-login-content p-3">
-                <h2 style="font-size: 24px; margin-bottom: 8px;">이메일로 로그인</h2>
-                <p style="color: var(--text-dim); margin-bottom: 32px;">나머지 정보를 입력해 주세요.</p>
+            <div class="email-login-content p-3" style="margin-top:20px;">
+                <h2 style="font-size: 26px; font-weight: 800; margin-bottom: 8px; color: #333;">로그인</h2>
+                <p style="color: var(--text-dim); margin-bottom: 40px; font-size: 15px;">아이디 또는 이메일을 입력해 주세요.</p>
                 
-                <div class="input-group mt-3">
-                    <label>이메일</label>
-                    <input type="email" id="login-email" placeholder="example@mail.com" style="width:100%; height:50px; border-radius:12px; border:1px solid #ddd; padding:0 16px;">
+                <div class="input-group">
+                    <label style="font-size:13px; font-weight:700; color:#555; margin-bottom:8px; display:block;">아이디 / 이메일</label>
+                    <input type="text" id="login-email" placeholder="아이디 혹은 example@mail.com" style="width:100%; height:55px; border-radius:15px; border:1px solid #eee; padding:0 18px; background:#f9f9f9; font-size:15px;">
                 </div>
                 
-                <div class="input-group mt-2">
-                    <label>비밀번호</label>
-                    <input type="password" id="login-pw" placeholder="비밀번호를 입력하세요" style="width:100%; height:50px; border-radius:12px; border:1px solid #ddd; padding:0 16px;">
+                <div class="input-group mt-3">
+                    <label style="font-size:13px; font-weight:700; color:#555; margin-bottom:8px; display:block;">비밀번호</label>
+                    <input type="password" id="login-pw" placeholder="비밀번호를 입력하세요" style="width:100%; height:55px; border-radius:15px; border:1px solid #eee; padding:0 18px; background:#f9f9f9; font-size:15px;">
                 </div>
                 
                 <div style="text-align: right; margin: 16px 0;">
-                    <a href="#" style="font-size: 13px; color: var(--text-dim); text-decoration: none;">비밀번호 찾기</a>
+                    <a href="#" style="font-size: 13px; color: var(--text-dim); text-decoration: none; font-weight:500;">비밀번호 찾기</a>
                 </div>
                 
-                <button class="btn-primary mt-3" onclick="loginWithEmail()">로그인</button>
+                <button class="btn-primary mt-4" style="height:55px; border-radius:15px; font-size:16px; font-weight:700;" onclick="loginWithEmail()">로그인</button>
                 
                 <div style="text-align: center; margin-top: 32px;">
                     <p style="font-size: 14px; color: var(--text-dim);">계정이 없으신가요? <a href="#" style="color: var(--primary-color); font-weight: 700; text-decoration: none;">회원가입</a></p>
@@ -1481,8 +1481,8 @@ function loginWithEmail() {
         alert('개발자 계정으로 로그인되었습니다. 모든 예약 열람 및 수정 권한이 활성화됩니다.');
     }
     // 2. 멘토 계정들 (비번: mentor123 공통)
-    else if (email.endsWith('@plus.com') && pw === 'mentor123') {
-        const categoryInput = email.split('@')[0].toLowerCase();
+    // 이메일(@plus.com) 혹은 간편 아이디(realestate 등) 지원
+    else {
         const categoriesMap = {
             'realestate': 'realEstate',
             'healing': 'healing',
@@ -1492,24 +1492,22 @@ function loginWithEmail() {
             'edu': 'edu'
         };
 
-        const categoryKey = categoriesMap[categoryInput];
+        const inputLower = email.toLowerCase().replace('@plus.com', '');
+        const categoryKey = categoriesMap[inputLower];
 
-        if (categoryKey) {
+        if (categoryKey && pw === 'mentor123') {
             currentUser = {
                 name: mentorsData[categoryKey].name.split('&')[0].trim() + ' 멘토님',
                 role: 'mentor',
                 mentorId: categoryKey
             };
             alert(`${currentUser.name}으로 오신 것을 환영합니다. 담당 파트 예약을 관리해 보세요.`);
-        } else {
-            currentUser = { name: '일반 사용자', role: 'user' };
-            alert('멘토 계정이 확인되지 않아 일반 사용자로 로그인되었습니다.');
         }
-    }
-    // 3. 일반 사용자
-    else {
-        currentUser = { name: '이메일 사용자', role: 'user' };
-        alert('일반 사용자로 로그인되었습니다.');
+        // 3. 일반 사용자
+        else {
+            currentUser = { name: '이메일 사용자', role: 'user' };
+            alert('일반 사용자로 로그인되었습니다.');
+        }
     }
 
     navigateTo('category');
