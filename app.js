@@ -1214,7 +1214,6 @@ async function loadUserBookings() {
     try {
         const snapshot = await db.collection('bookings')
             .where('userName', '==', currentUser.name)
-            .orderBy('timestamp', 'desc')
             .get();
 
         if (snapshot.empty) {
@@ -1228,9 +1227,15 @@ async function loadUserBookings() {
             return;
         }
 
-        let html = '<div class="history-list">';
+        // 로컬에서 정렬
+        const bookings = [];
         snapshot.forEach(doc => {
-            const booking = doc.data();
+            bookings.push({ id: doc.id, ...doc.data() });
+        });
+        bookings.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+        let html = '<div class="history-list">';
+        bookings.forEach(booking => {
             const statusBg = booking.status === '완료' ? '#eee' : 'var(--primary-light)';
             const statusColor = booking.status === '완료' ? '#999' : 'var(--primary-dark)';
 
@@ -1301,7 +1306,8 @@ async function loadAllBookings() {
     if (!listContainer) return;
 
     try {
-        const snapshot = await db.collection('bookings').orderBy('timestamp', 'desc').get();
+        // 인덱스 오류 방지: orderBy를 빼고 전체를 가져온 뒤 로컬에서 정렬
+        const snapshot = await db.collection('bookings').get();
         if (snapshot.empty) {
             listContainer.innerHTML = `
                 <div style="text-align: center; padding: 100px 20px; color: var(--text-light);">
@@ -1312,16 +1318,22 @@ async function loadAllBookings() {
             return;
         }
 
-        let html = '';
+        // 데이터를 배열로 변환 후 정렬
+        const bookings = [];
         snapshot.forEach(doc => {
-            const booking = doc.data();
+            bookings.push({ id: doc.id, ...doc.data() });
+        });
+        bookings.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+        let html = '';
+        bookings.forEach(booking => {
             const statusColor = booking.status === '완료' ? '#aaa' : 'var(--primary-color)';
 
             html += `
                 <div class="admin-booking-card" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); border-left: 5px solid ${statusColor};">
                     <div style="display:flex; justify-content: space-between; margin-bottom: 10px;">
                         <span style="font-size: 12px; color: var(--text-dim);">${booking.id}</span>
-                        <select onchange="updateBookingStatus('${doc.id}', this.value)" style="border:none; background: #f8f9fa; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight:700;">
+                        <select onchange="updateBookingStatus('${booking.id}', this.value)" style="border:none; background: #f8f9fa; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight:700;">
                             <option value="대기" ${booking.status === '대기' ? 'selected' : ''}>⏳ 대기</option>
                             <option value="확정" ${booking.status === '확정' ? 'selected' : ''}>✅ 확정</option>
                             <option value="완료" ${booking.status === '완료' ? 'selected' : ''}>🏁 완료</option>
@@ -1371,10 +1383,9 @@ async function loadMentorBookings() {
     if (!listContainer || !currentUser || !currentUser.mentorId) return;
 
     try {
-        // 본인의 mentorId와 일치하는 예약만 가져오기
+        // 인덱스 오류 방지: 서버 정렬 대신 클라이언트 정렬
         const snapshot = await db.collection('bookings')
             .where('mentorId', '==', currentUser.mentorId)
-            .orderBy('timestamp', 'desc')
             .get();
 
         if (snapshot.empty) {
@@ -1387,21 +1398,27 @@ async function loadMentorBookings() {
             return;
         }
 
+        // 로컬에서 정렬
+        const bookings = [];
+        snapshot.forEach(doc => {
+            bookings.push({ id: doc.id, ...doc.data() });
+        });
+        bookings.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
         let html = `
             <div class="mentor-badge-info" style="background: var(--primary-light); color: var(--primary-dark); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 13px; font-weight: 700;">
-                📢 ${mentorsData[currentUser.mentorId].name} 멘토님,<br>현재 담당 파트 예약 건수: ${snapshot.size}건
+                📢 ${mentorsData[currentUser.mentorId].name} 멘토님,<br>현재 담당 파트 예약 건수: ${bookings.length}건
             </div>
         `;
 
-        snapshot.forEach(doc => {
-            const booking = doc.data();
+        bookings.forEach(booking => {
             const statusColor = booking.status === '완료' ? '#aaa' : 'var(--primary-color)';
 
             html += `
                 <div class="admin-booking-card" style="background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); border-left: 5px solid ${statusColor};">
                     <div style="display:flex; justify-content: space-between; margin-bottom: 10px;">
                         <span style="font-size: 11px; color: var(--text-dim);">${booking.id}</span>
-                        <select onchange="updateBookingStatus('${doc.id}', this.value)" style="border:none; background: #f8f9fa; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight:700;">
+                        <select onchange="updateBookingStatus('${booking.id}', this.value)" style="border:none; background: #f8f9fa; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight:700;">
                             <option value="대기" ${booking.status === '대기' ? 'selected' : ''}>⏳ 대기</option>
                             <option value="확정" ${booking.status === '확정' ? 'selected' : ''}>✅ 확정</option>
                             <option value="완료" ${booking.status === '완료' ? 'selected' : ''}>🏁 완료</option>
