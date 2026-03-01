@@ -138,7 +138,7 @@ const screens = {
         <div class="screen category-screen fade-in">
             <header class="header">
                 <div class="brand-wrapper">
-                    <p class="brand-tag">HEALING O2O</p>
+                    <p class="brand-tag">HEALING 2026</p>
                     <h2 class="brand-name">플러스 정거장</h2>
                 </div>
                 <div style="display:flex; gap: 8px;">
@@ -159,7 +159,7 @@ const screens = {
             <div class="category-list">
                 <div class="category-card item-real-estate" onclick="openMentor('realEstate')">
                     <div class="category-thumb">
-                         <img src="cat_realestate.png" alt="부동산">
+                         <i class="fa-solid fa-house-home" style="font-size: 24px; color: #50b498;"></i>
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">집 계약이나 이사 문제가 고민이에요</h3>
@@ -170,7 +170,7 @@ const screens = {
                 
                 <div class="category-card item-healing" onclick="openMentor('healing')">
                     <div class="category-thumb">
-                         <img src="cat_healing.png" alt="치유">
+                         <i class="fa-solid fa-heart-pulse" style="font-size: 24px; color: #ff6b6b;"></i>
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">나와 가족, 관계의 마음을 돌보고 싶어요</h3>
@@ -181,7 +181,7 @@ const screens = {
                 
                 <div class="category-card item-legal" onclick="openMentor('legal')">
                     <div class="category-thumb">
-                         <img src="cat_legal.png" alt="법률">
+                         <i class="fa-solid fa-scale-balanced" style="font-size: 24px; color: #4dadf7;"></i>
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">억울하고 답답한 법적 문제가 생겼요</h3>
@@ -192,7 +192,7 @@ const screens = {
                 
                 <div class="category-card item-tax" onclick="openMentor('tax')">
                     <div class="category-thumb">
-                         <img src="cat_tax.png" alt="세무">
+                         <i class="fa-solid fa-calculator" style="font-size: 24px; color: #fcc419;"></i>
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">복잡한 세금과 돈 관리가 막막해요</h3>
@@ -203,7 +203,7 @@ const screens = {
                 
                 <div class="category-card item-insurance" onclick="openMentor('insurance')">
                     <div class="category-thumb">
-                         <img src="cat_insurance.png" alt="보험">
+                         <i class="fa-solid fa-shield-heart" style="font-size: 24px; color: #51cf66;"></i>
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">내 보험, 제대로 들고 있는지 궁금해요</h3>
@@ -214,7 +214,7 @@ const screens = {
                 
                 <div class="category-card item-edu" onclick="openMentor('edu')">
                     <div class="category-thumb">
-                         <img src="cat_edu.png" alt="교육">
+                         <i class="fa-solid fa-graduation-cap" style="font-size: 24px; color: #845ef7;"></i>
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">우리 아이 교육과 진로 방향을 잡고 싶어요</h3>
