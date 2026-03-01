@@ -1,4 +1,22 @@
+// --- Firebase Configuration ---
+const firebaseConfig = {
+    apiKey: "AIzaSyD2Ng5gORxcxk2E-UrzqhEzMCA1cUu2PeM",
+    authDomain: "cut-460909.firebaseapp.com",
+    projectId: "cut-460909",
+    storageBucket: "cut-460909.firebasestorage.app",
+    messagingSenderId: "160421849253",
+    appId: "1:160421849253:web:9a74253416ad7802e8454c",
+    measurementId: "G-XYT5LX4QJ4"
+};
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
 const app = document.getElementById('app');
+
 
 // State Management
 let currentState = 'login';
@@ -158,67 +176,67 @@ const screens = {
             
             <div class="category-list">
                 <div class="category-card item-real-estate" onclick="openMentor('realEstate')">
-                    <div class="category-thumb">
-                         <i class="fa-solid fa-house-home" style="font-size: 24px; color: #50b498;"></i>
+                    <div class="category-icon icon-real-estate">
+                         <i class="fa-solid fa-house"></i>
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">집 계약이나 이사 문제가 고민이에요</h3>
-                        <p class="category-desc">부동산 · 주거 상담</p>
+                        <h3 class="category-name">부동산 · 주거 상담</h3>
+                        <p class="category-desc">집 계약이나 이사 문제가 고민이에요</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
                 <div class="category-card item-healing" onclick="openMentor('healing')">
-                    <div class="category-thumb">
-                         <i class="fa-solid fa-heart-pulse" style="font-size: 24px; color: #ff6b6b;"></i>
+                    <div class="category-icon icon-healing">
+                         <i class="fa-solid fa-heart"></i>
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">나와 가족, 관계의 마음을 돌보고 싶어요</h3>
-                        <p class="category-desc">심리 상담 · 관계 개선</p>
+                        <h3 class="category-name">심리 상담 · 관계 개선</h3>
+                        <p class="category-desc">나와 가족, 관계의 마음을 돌보고 싶어요</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
                 <div class="category-card item-legal" onclick="openMentor('legal')">
-                    <div class="category-thumb">
-                         <i class="fa-solid fa-scale-balanced" style="font-size: 24px; color: #4dadf7;"></i>
+                    <div class="category-icon icon-legal">
+                         <i class="fa-solid fa-scale-balanced"></i>
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">억울하고 답답한 법적 문제가 생겼요</h3>
-                        <p class="category-desc">법률 자문 · 권리 구제</p>
+                        <h3 class="category-name">법률 자문 · 권리 구제</h3>
+                        <p class="category-desc">억울하고 답답한 법적 문제가 생겼요</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
                 <div class="category-card item-tax" onclick="openMentor('tax')">
-                    <div class="category-thumb">
-                         <i class="fa-solid fa-calculator" style="font-size: 24px; color: #fcc419;"></i>
+                    <div class="category-icon icon-tax">
+                         <i class="fa-solid fa-calculator"></i>
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">복잡한 세금과 돈 관리가 막막해요</h3>
-                        <p class="category-desc">세무 · 자산 관리</p>
+                        <h3 class="category-name">세무 · 자산 관리</h3>
+                        <p class="category-desc">복잡한 세금과 돈 관리가 막막해요</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
                 <div class="category-card item-insurance" onclick="openMentor('insurance')">
-                    <div class="category-thumb">
-                         <i class="fa-solid fa-shield-heart" style="font-size: 24px; color: #51cf66;"></i>
+                    <div class="category-icon icon-insurance">
+                         <i class="fa-solid fa-shield-heart"></i>
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">내 보험, 제대로 들고 있는지 궁금해요</h3>
-                        <p class="category-desc">보험 진단 · 설계 상담</p>
+                        <h3 class="category-name">보험 진단 · 설계 상담</h3>
+                        <p class="category-desc">내 보험, 제대로 들고 있는지 궁금해요</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
                 
                 <div class="category-card item-edu" onclick="openMentor('edu')">
-                    <div class="category-thumb">
-                         <i class="fa-solid fa-graduation-cap" style="font-size: 24px; color: #845ef7;"></i>
+                    <div class="category-icon icon-edu">
+                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
                     <div class="category-info">
-                        <h3 class="category-name">우리 아이 교육과 진로 방향을 잡고 싶어요</h3>
-                        <p class="category-desc">교육 · 입시 · 진로</p>
+                        <h3 class="category-name">교육 · 입시 · 진로</h3>
+                        <p class="category-desc">우리 아이 교육과 진로 방향을 잡고 싶어요</p>
                     </div>
                     <i class="fa-solid fa-chevron-right category-arrow"></i>
                 </div>
@@ -897,7 +915,7 @@ function handlePhotoChange(event) {
     }
 }
 
-function saveMentorSettings() {
+async function saveMentorSettings() {
     const name = document.getElementById('edit-name').value;
     const title = document.getElementById('edit-title').value;
     const bio = document.getElementById('edit-bio').value;
@@ -907,6 +925,7 @@ function saveMentorSettings() {
         return;
     }
 
+    // 로컬 데이터 선반영
     currentMentor.name = name;
     currentMentor.title = title;
     currentMentor.bio = bio;
@@ -930,7 +949,15 @@ function saveMentorSettings() {
         currentMentor.image = tempImageData;
     }
 
-    alert('프로필이 성공적으로 수정되었습니다.');
+    // --- Firebase 저장 로직 추가 ---
+    try {
+        await db.collection('mentors').doc(currentMentor.id).set(currentMentor);
+        alert('프로필이 성공적으로 수정되었으며 클라우드에 저장되었습니다! ✨');
+    } catch (error) {
+        console.error("Firebase 저장 Error:", error);
+        alert('로컬에 저장되었지만, 클라우드 저장에 실패했습니다. (나중에 다시 시도해 주세요)');
+    }
+
     tempImageData = null; // 저장 후 초기화
     navigateTo('mentor');
 }
@@ -1107,7 +1134,37 @@ function loginWithEmail() {
 
 window.handleLogin = handleLogin;
 
+// --- Firebase Data Synchronization ---
+async function syncMentorsWithFirebase() {
+    try {
+        const snapshot = await db.collection('mentors').get();
+        if (snapshot.empty) {
+            // 처음 실행 시 기본 데이터 업로드
+            console.log("Firebase가 비어있습니다. 초기 데이터를 업로드합니다.");
+            for (const key in mentorsData) {
+                await db.collection('mentors').doc(key).set(mentorsData[key]);
+            }
+        } else {
+            // 클라우드 데이터 가져와서 반영
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (mentorsData[doc.id]) {
+                    mentorsData[doc.id] = data;
+                }
+            });
+            console.log("Firebase에서 최신 데이터를 불러왔습니다.");
+        }
+    } catch (error) {
+        console.error("데이터 동기화 오류:", error);
+    }
+}
+
 // Initial Rendering
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. 로그인 화면 먼저 보여주기
     navigateTo('login');
+
+    // 2. 백그라운드에서 Firebase 데이터 불러오기
+    await syncMentorsWithFirebase();
 });
+
