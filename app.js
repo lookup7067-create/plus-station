@@ -24,7 +24,7 @@ let currentUser = null; // { name: '...', role: 'user' | 'developer' }
 let viewDate = new Date(); // 달력에서 보여지는 달
 let selectedDate = new Date(); // 선택된 날짜
 let currentMentor = null; // 현재 선택된 멘토 데이터
-let selectedTime = "오전 10:00"; // 기본 선택 시간
+let selectedTime = "오전 10:30"; // 기본 선택 시간
 let selectedLocation = "플러스 커뮤니티 라운지"; // 기본 장소
 let selectedAddress = "서울특별시 마포구 연남동"; // 기본 주소
 let tempImageData = null; // 업로드용 임시 이미지 데이터
@@ -504,7 +504,7 @@ const screens = {
         </div>
     `,
     booking: () => {
-        const timeSlots = ["오전 10:00", "오전 11:30", "오후 01:00", "오후 02:30", "오후 04:00", "오후 05:30"];
+        const timeSlots = ["오전 10:30", "오후 02:00", "오후 04:00"];
         let timeChips = timeSlots.map(time => {
             const isBooked = bookedTimes.includes(time);
             return `
