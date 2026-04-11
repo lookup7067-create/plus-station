@@ -570,7 +570,7 @@ const screens = {
                 <div class="notice-banner">
                     <i class="fa-solid fa-circle-info notice-icon"></i>
                     <p class="notice-text">
-                        <strong>최소 책임비: 2,000원</strong><br>
+                        <strong>최소 책임비: 1,000원</strong><br>
                         오프라인 다과비로 사용되며 노쇼 방지를 위한 최소한의 약속입니다.
                     </p>
                 </div>
@@ -595,7 +595,7 @@ const screens = {
                     </div>
                     <div class="total-row">
                         <span class="total-label">총 결제 금액</span>
-                        <span class="total-amount">2,000원</span>
+                        <span class="total-amount">1,000원</span>
                     </div>
                 </div>
 
@@ -1074,7 +1074,7 @@ const screens = {
             <div class="p-3">
                 <div class="payment-summary" style="background: white; border-radius: 20px; padding: 24px; box-shadow: var(--shadow-soft); margin-bottom: 24px; text-align: center;">
                     <p style="font-size: 14px; color: var(--text-dim); margin-bottom: 8px;">최종 결제 금액</p>
-                    <h2 style="font-size: 32px; color: var(--primary-color); font-weight: 800;">2,000원</h2>
+                    <h2 style="font-size: 32px; color: var(--primary-color); font-weight: 800;">1,000원</h2>
                     <p style="font-size: 12px; color: #aaa; margin-top: 12px;">멘토링 노쇼 방지를 위한 소액 책임비(다과비)입니다.</p>
                 </div>
 
