@@ -1,19 +1,33 @@
-// --- Firebase Configuration ---
-const firebaseConfig = {
-    apiKey: "AIzaSyD2Ng5gORxcxk2E-UrzqhEzMCA1cUu2PeM",
-    authDomain: "cut-460909.firebaseapp.com",
-    projectId: "cut-460909",
-    storageBucket: "cut-460909.firebasestorage.app",
-    messagingSenderId: "160421849253",
-    appId: "1:160421849253:web:9a74253416ad7802e8454c",
-    measurementId: "G-XYT5LX4QJ4"
+// --- Firebase Configuration (API 연동 해제) ---
+// const firebaseConfig = { ... };
+// if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+// const db = firebase.firestore();
+
+// API 연동 없이 기존 구조 그대로 사용하기 위한 임시 가짜 DB 객체 생성
+const db = {
+    collection: function(name) {
+        return {
+            get: async () => ({ empty: true, docs: [], forEach: () => {} }),
+            add: async () => ({}),
+            doc: function() {
+                return {
+                    set: async () => ({}),
+                    delete: async () => ({}),
+                    update: async () => ({})
+                }
+            },
+            orderBy: function() { return this; }
+        };
+    }
 };
 
-// Initialize Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
+const firebase = {
+    firestore: {
+        FieldValue: {
+            serverTimestamp: () => new Date()
+        }
+    }
+};
 
 const app = document.getElementById('app');
 
